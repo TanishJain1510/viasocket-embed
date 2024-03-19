@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://interface-embed.viasocket.com/style.css">
+</head>
+
+<body>
+    <div id='iframe-parent-container'>
+        <div className='header'>
+            <h4 id='title'>Title</h4>
+        </div>
+        <iframe id='iframe-component' title='iframe'></iframe>
+    </div>
+
+    <button id="interfaceEmbed"> Integrations </button>
+    <script src="https://interface-embed.viasocket.com/interface-local.js"></script>
+    <script>
+        const element = document.getElementById("interfaceEmbed");
+        element.addEventListener("click", () => {
+            const socketDetails = { embedToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidGVzdHVzZXIxMjM0NTY3IiwicHJvamVjdF9pZCI6InByb2pEN2Q5N2lOUSIsImludGVyZmFjZV9pZCI6IjY1OGQ2OWNmYTg4MzU2NmFiNjYxZDYwNiIsIm9yZ19pZCI6Im9yZ2loSHFJa2ZmdSJ9.KJuTQP8ZvM-EI8_08-OUcbMaaZnjFhoU-wRad30Fm6g' };
+            const configJson = { height: '80vh', width: '400px', initialButtonName: 'Ask Ai', title: 'Chatbot' };
+            window.InitializeInterface(socketDetails, configJson);
+        });
+        window.addEventListener('message', (event) => {
+            if (event.origin === "http://localhost:3000") {
+                const receivedData = event.data;
+                console.log(receivedData);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
