@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
-  entry: './embed-build/test-webcomponent.js',
+  entry: './interface/interface-local.js',
   output: {
-    filename: 'test-embedcomponent.js',
-    path: path.resolve(__dirname, 'embed-build'),
+    filename: 'interface-local.js',
+    path: path.resolve(__dirname, 'interface-build'),
   },
   module: {
     rules: [
