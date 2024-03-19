@@ -60,7 +60,7 @@ loadViasocketEmbed = async function () {
     if (interface_id) {
       requestOptions = {
         method: 'POST',
-        body: JSON.stringify({ isAnyonumousUser: true, interface_id: interface_id }),
+        body: JSON.stringify({ isAnonymousUser: true, interface_id: interface_id }),
         headers: {
           'Content-Type': 'application/json',
         }
