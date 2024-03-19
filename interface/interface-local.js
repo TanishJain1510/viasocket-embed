@@ -41,23 +41,36 @@ SendDataToInterface = function (dataToSend) {
 }
 
 loadViasocketEmbed = async function () {
-  
-  const embedToken = document.getElementById('interface-main-script')?.getAttribute('embedToken')
+  const embedToken = document.getElementById('interface-main-script')?.getAttribute('embedToken');
   let modifiedUrl = `${urlToViasocket}?`
+  const loginurl = 'http://localhost:7070/interfaces/loginuser';
+  let requestOptions = {};
 
-  const loginurl = 'http://localhost:7070/interfaces/loginuser'
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: embedToken
+  if (embedToken) {
+    requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: embedToken
+      }
+    }
+  } else {
+    const interface_id = document.getElementById('interface-main-script')?.getAttribute('interface_id');
+    if (interface_id) {
+      requestOptions = {
+        method: 'POST',
+        body: JSON.stringify({ isAnyonumousUser: true, interface_id: interface_id }),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
     }
   }
 
   fetch(loginurl, requestOptions)
-    .then((response) => {
-      return response.json()
+    .then(async (response) => {
+      const data = await response.json();
+      return data
     })
     .then((data) => {
       config = data?.data?.config
@@ -79,7 +92,8 @@ loadViasocketEmbed = async function () {
         if (config.type) {
           document.getElementById('iframe-parent-container').classList.remove(`${className}-parent-container`)
           document.getElementById('interfaceEmbed').classList.remove(`${className}-interfaceEmbed`)
-          className = config.type}
+          className = config.type
+        }
       }
       document.getElementById('iframe-parent-container').classList.add(`${className}-parent-container`)
       document.getElementById('interfaceEmbed').classList.add(`${className}-interfaceEmbed`)
