@@ -7,8 +7,9 @@
 /* popover */
 .popover-parent-container {
   position: fixed;
-  bottom: 20px;
-  right: 5vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #fff;
   z-index: 9999;
   display: none;
@@ -42,8 +43,8 @@
 /* popup */
 .popup-parent-container {
   position: fixed;
-  bottom: 20px;
-  right: 10px;
+  bottom: 0%;
+  right: 0%;
   background-color: #fff;
   z-index: 9999;
   display: none;
@@ -61,9 +62,9 @@
 /* left slider */
 .left_slider-parent-container {
   position: fixed;
-  left: 0px;
+  left: 0;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(0%, -50%);
   background-color: #ffffff;
   z-index: 9999;
   display: none;
@@ -82,9 +83,9 @@
 /* right slider */
 .right_slider-parent-container {
   position: fixed;
-  right: 0px;
+  right: 0;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(0%, -50%);
   background-color: #ffffff;
   z-index: 9999;
   display: none;
