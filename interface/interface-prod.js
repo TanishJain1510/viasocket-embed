@@ -1,6 +1,13 @@
 /* eslint-disable */
-/* eslint-disable */
 const urlToViasocket = `https://face.viasocket.com/i`;
+
+var link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = 'https://interface-embed.viasocket.com/style-prod.css';
+// Append the link element to the head of the document
+document.head.appendChild(link);
+
 var button = document.createElement('button')
 let config = ''
 let title = 'Via socket'

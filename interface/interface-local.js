@@ -3,6 +3,14 @@ const urlToViasocket = `http://localhost:3000/i`
 // Select the iframe-parent-container document.getElementById('interfaceEmbed') by its ID
 
 // Create a new button document.getElementById('interfaceEmbed')
+
+var link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = 'https://interface-embed.viasocket.com/style-local.css';
+// Append the link element to the head of the document
+document.head.appendChild(link);
+
 var button = document.createElement('button')
 let config = ''
 let title = 'Via socket'
@@ -119,6 +127,7 @@ iframeController = function () {
   }
 }
 loadViasocketEmbed()
+
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
   window.InitializeInterface()
 })
