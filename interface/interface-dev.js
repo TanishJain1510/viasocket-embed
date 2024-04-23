@@ -23,15 +23,16 @@ button.style.position = 'absolute'
 let className = 'popup'
 button.style.top = '2px' // Adjust the top position as needed
 button.style.right = '2px'
-button.addEventListener('click', () => {
+closeIframe = function () {
   if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
-    document.getElementById('iframe-parent-container').style.display = 'none'
-    document.body.style.overflow = 'auto'
-    document.getElementById('interfaceEmbed').style.display = 'unset'
-    window.parent?.postMessage({ type: 'close', data: {} }, '*')
-    return
+      document.getElementById('iframe-parent-container').style.display = 'none'
+      document.body.style.overflow = 'auto'
+      document.getElementById('interfaceEmbed').style.display = 'unset'
+      window.parent?.postMessage({ type: 'close', data: {} }, '*')
+      return
   }
-})
+}
+button.addEventListener('click', closeIframe)
 document.getElementById('iframe-parent-container')?.appendChild(button)
 
 InitializeInterface = function () {
