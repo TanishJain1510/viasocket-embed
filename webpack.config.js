@@ -1,9 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  entry: './interface/interface-local.js',
+  entry: './interface/interface-prod.js',
   output: {
-    filename: 'interface-local.js',
+    filename: 'interface-prod.js',
     path: path.resolve(__dirname, 'interface-build'),
   },
   module: {

@@ -1,26 +1,41 @@
 /* eslint-disable */
 const urlToViasocket = `http://localhost:3000/i`
-// Select the iframe-parent-container document.getElementById('interfaceEmbed') by its ID
-// Create a new button document.getElementById('interfaceEmbed')
-var link = document.createElement('link');
-link.rel = 'stylesheet';
-link.type = 'text/css';
-link.href = 'https://interface-embed.viasocket.com/style-local.css';
-// Append the link element to the head of the document
-document.head.appendChild(link);
+const styleUrl = 'https://interface-embed.viasocket.com/style-local.css';
 
-var button = document.createElement('button')
+let bodyLoaded = false;
+loadContent = function () {
+  if (bodyLoaded) return;
+  // Append the link element to the head of the document
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = styleUrl;
+  document.head.appendChild(link);
+
+  if (!document.getElementById('iframe-parent-container')) {
+    const parentContainer = document.createElement('div');
+    parentContainer.id = 'iframe-parent-container';
+    parentContainer.innerHTML = `
+    <button id='close-button' onclick="closeIframe()">
+    <svg width="35px" height="35px" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(4.640000000000001,4.640000000000001), scale(0.71)"><rect x="-3.2" y="-3.2" width="38.40" height="38.40" rx="0" fill="#ffffff" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>cross-square</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-206.000000, -1037.000000)" fill="#000000"> <path d="M226.95,1056.54 C227.34,1056.93 227.34,1057.56 226.95,1057.95 C226.559,1058.34 225.926,1058.34 225.536,1057.95 L222,1054.41 L218.464,1057.95 C218.074,1058.34 217.441,1058.34 217.05,1057.95 C216.66,1057.56 216.66,1056.93 217.05,1056.54 L220.586,1053 L217.05,1049.46 C216.66,1049.07 216.66,1048.44 217.05,1048.05 C217.441,1047.66 218.074,1047.66 218.464,1048.05 L222,1051.59 L225.536,1048.05 C225.926,1047.66 226.559,1047.66 226.95,1048.05 C227.34,1048.44 227.34,1049.07 226.95,1049.46 L223.414,1053 L226.95,1056.54 L226.95,1056.54 Z M234,1037 L210,1037 C207.791,1037 206,1038.79 206,1041 L206,1065 C206,1067.21 207.791,1069 210,1069 L234,1069 C236.209,1069 238,1067.21 238,1065 L238,1041 C238,1038.79 236.209,1037 234,1037 L234,1037 Z" id="cross-square" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
+    </button>
+  <iframe id="iframe-component" title="iframe"></iframe>`
+    document.body.appendChild(parentContainer);
+  }
+  else {
+    closeIframe()
+    if (document.getElementById('iframe-component')) document.getElementById('iframe-component').src = ''
+  }
+  bodyLoaded = true;
+}
+document.addEventListener("DOMContentLoaded", loadContent);
+if (document?.body) loadContent()
+
 let config = ''
 let title = 'Via socket'
 let buttonName = 'open'
-button.setAttribute('type', 'button')
-button.setAttribute('class', 'close-button')
-button.setAttribute('id', 'close-button')
-button.textContent = 'close'
-button.style.position = 'absolute'
 let className = 'popup'
-button.style.top = '2px' // Adjust the top position as needed
-button.style.right = '2px';
+
 closeIframe = function () {
     if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
         document.getElementById('iframe-parent-container').style.display = 'none'

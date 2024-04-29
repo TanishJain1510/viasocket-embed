@@ -7,14 +7,13 @@
 /* popover */
 .popover-parent-container {
   position: fixed;
-  bottom: 20px;
-  right: 5vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #fff;
   z-index: 9999;
   display: none;
   box-sizing: border-box;
-  height: 90vh;
-  width: 90vw;
 }
 .popover-interfaceEmbed {
   height: 40px;
@@ -25,18 +24,31 @@
   right: 45%;
   margin: auto;
 }
-
-/* popup */
-.popup-parent-container {
-  position: fixed;
-  bottom: 20px;
-  right: 10px;
+/* all space */
+.all_space-parent-container {
   background-color: #fff;
   z-index: 9999;
   display: none;
   box-sizing: border-box;
-  height: 85vh;
-  width: 70vw;
+  height: 100%;
+  width: 100%;
+}
+.all_space-interfaceEmbed {
+  height: 40px;
+  width: 120px;
+  background-color: #6495ed;
+  margin: auto;
+}
+
+/* popup */
+.popup-parent-container {
+  position: fixed;
+  bottom: 0%;
+  right: 0%;
+  background-color: #fff;
+  z-index: 9999;
+  display: none;
+  box-sizing: border-box;
 }
 .popup-interfaceEmbed {
   height: 60px;
@@ -50,14 +62,13 @@
 /* left slider */
 .left_slider-parent-container {
   position: fixed;
-  left: 0px;
-  bottom:20px;
+  left: 0;
+  top: 50%;
+  transform: translate(0%, -50%);
   background-color: #ffffff;
   z-index: 9999;
   display: none;
   box-sizing: border-box;
-  height: 95vh;
-  width: 70vw;
 }
 .left_slider-interfaceEmbed {
   height: 60px;
@@ -72,14 +83,13 @@
 /* right slider */
 .right_slider-parent-container {
   position: fixed;
-  right: 0px;
-  bottom: 20px;
+  right: 0;
+  top: 50%;
+  transform: translate(0%, -50%);
   background-color: #ffffff;
   z-index: 9999;
   display: none;
   box-sizing: border-box;
-  height: 95vh;
-  width: 70vw;
 }
 .right_slider-interfaceEmbed {
   height: 60px;
@@ -104,8 +114,13 @@
   align-items: center;
   padding: 4px 0;
 }
+#close-button,
 .close-button {
-  background-color: rgb(121, 19, 29);
+  position: absolute;
+  top: 8px !important;
+  right: 8px !important;
+  border: none !important;
+  background-color: transparent !important;
 }
 button {
   cursor: pointer;
