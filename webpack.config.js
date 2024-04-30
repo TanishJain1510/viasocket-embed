@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './interface/interface-prod.js',
+  entry: './interface/interface-prod-v2.js',
   output: {
     filename: 'interface-prod.js',
     path: path.resolve(__dirname, 'interface-build'),
