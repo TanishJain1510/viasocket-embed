@@ -78,7 +78,7 @@ loadContent = function () {
         const imgElement = document.createElement('img');
         imgElement.id = 'popup-interfaceEmbed';
         imgElement.alt = 'Ask Ai';
-        imgElement.src = AI_WHITE_ICON
+        imgElement.src = AI_BLACK_ICON
 
         chatBotIcon.appendChild(imgElement);
         document.body.appendChild(chatBotIcon);
@@ -124,11 +124,16 @@ SendDataToInterface = function (dataToSend) {
     }
 
     const messageType = 'interfaceData'
-    document.getElementById('iframe-component').onload = function () {
-        document.getElementById('iframe-component').contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+    const iframeComponent = document.getElementById('iframe-component')
+    console.log(iframeComponent, 'iframecomponent')
+    console.log(dataToSend, 'dataToSend')
+    if (iframeComponent) {
+        iframeComponent.onload = function () {
+            iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+        }
     }
-    if (dataToSend && document.getElementById('iframe-component')) {
-        document.getElementById('iframe-component').contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+    if (dataToSend && iframeComponent) {
+        iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
     }
 }
 
