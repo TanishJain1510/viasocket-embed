@@ -1,24 +1,16 @@
-
 /* eslint-disable */
 const urlToViasocket = `https://face.viasocket.com/i`;
 const styleUrl = 'https://interface-embed.viasocket.com/style-prod.css';
 const loginurl = 'https://flow-api.viasocket.com/interfaces/loginuser'
+
 let tempDataToSend = null;
 let bodyLoaded = false;
 const messageType = 'interfaceData'
 let props = {};
+const AI_WHITE_ICON = makeImageUrl('b1357e23-2fc6-4dc3-855a-7a213b1fa100')
+const AI_BLACK_ICON = makeImageUrl('91ee0bff-cfe3-4e2d-64e5-fadbd9a3a200')
 
 const interfaceScript = document.getElementById('interface-main-script');
-function SendTempDataToInterface(event) {
-    const { type } = event.data;
-    console.log(type, 'type', tempDataToSend, '23432345');
-    console.log(document.getElementById('iframe-parent-container'), 121234123451234)
-    if (type === 'interfaceLoaded' && tempDataToSend) {
-        document.getElementById('iframe-parent-container').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
-        tempDataToSend = null;
-    }
-}
-window.addEventListener('message', SendTempDataToInterface);
 
 if (interfaceScript) {
     // Create an object to store the extracted attributes
@@ -32,12 +24,10 @@ if (interfaceScript) {
 } else {
     console.log("Script tag not found");
 }
+
 function makeImageUrl(imageId) {
     return `https://imagedelivery.net/Vv7GgOGQbSyClWJqhyP0VQ/${imageId}/public`
 }
-
-const AI_WHITE_ICON = makeImageUrl('b1357e23-2fc6-4dc3-855a-7a213b1fa100')
-const AI_BLACK_ICON = makeImageUrl('91ee0bff-cfe3-4e2d-64e5-fadbd9a3a200')
 
 closeIframe = function () {
     if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
@@ -63,9 +53,20 @@ const setPropValues = (newprops) => {
     }
 }
 
+const SendTempDataToInterface = function (event) {
+    const { type } = event.data;
+    console.log(type, 'type', tempDataToSend, '23432345');
+    if (type === 'interfaceLoaded' && tempDataToSend) {
+        document.getElementById('iframe-component').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
+        window.removeEventListener('message', SendTempDataToInterface);
+        tempDataToSend = null;
+    }
+}
+
 loadContent = function () {
     if (bodyLoaded) return;
     // Append the link element to the head of the document
+    window.addEventListener('message', SendTempDataToInterface, {once: true});
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
@@ -84,7 +85,6 @@ loadContent = function () {
             </button>
         <iframe id="iframe-component" title="iframe"></iframe>
   `
-
         const chatBotIcon = document.createElement('div')
         chatBotIcon.id = 'interfaceEmbed'
 
@@ -110,19 +110,26 @@ loadContent = function () {
     bodyLoaded = true;
     updateProps({ ...props })
 }
+
 document.addEventListener("DOMContentLoaded", loadContent);
-if (document?.body) loadContent()
+if (document?.body) loadContent();
+
+const iframeComponent = document.getElementById('iframe-component');
+if (iframeComponent) {
+    iframeComponent.onload = function () {
+        console.log('ifram onload and remove event listener', tempDataToSend, 'tempDataToSend');
+        iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
+    }
+}
 
 let config = ''
 let title = 'Via socket'
 let buttonName = 'open'
 let className = 'popup'
 
-
 InitializeInterface = function () {
     iframeController()
 }
-
 
 SendDataToInterface = function (dataToSend) {
     if (dataToSend.theme) {
@@ -133,16 +140,6 @@ SendDataToInterface = function (dataToSend) {
     }
     else if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
         updateProps({ fullScreen: dataToSend.fullScreen });
-    }
-
-    const iframeComponent = document.getElementById('iframe-component');
-    console.log('iframeComponent', iframeComponent);
-    console.log('dataToSend', dataToSend);
-    if (iframeComponent) {
-        iframeComponent.onload = function () {
-            iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
-            window.removeEventListener('message', SendTempDataToInterface)
-        }
     }
     if (dataToSend && iframeComponent) {
         tempDataToSend = dataToSend;

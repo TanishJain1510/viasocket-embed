@@ -1,13 +1,17 @@
-
 /* eslint-disable */
 const urlToViasocket = `http://localhost:3000/i`
 const styleUrl = 'https://interface-embed.viasocket.com/style-local.css';
 const loginurl = 'http://localhost:7070/interfaces/loginuser';
 
+let tempDataToSend = null;
 let bodyLoaded = false;
+const messageType = 'interfaceData'
+let props = {};
+const AI_WHITE_ICON = makeImageUrl('b1357e23-2fc6-4dc3-855a-7a213b1fa100')
+const AI_BLACK_ICON = makeImageUrl('91ee0bff-cfe3-4e2d-64e5-fadbd9a3a200')
 
 const interfaceScript = document.getElementById('interface-main-script');
-let props = {};
+
 if (interfaceScript) {
     // Create an object to store the extracted attributes
     const attributes = ['interfaceId', 'embedToken', 'threadId', 'bridgeName', 'variables', 'onOpen', 'onClose', 'theme', 'className', 'style', 'environment', 'fullScreen'];
@@ -20,12 +24,10 @@ if (interfaceScript) {
 } else {
     console.log("Script tag not found");
 }
+
 function makeImageUrl(imageId) {
     return `https://imagedelivery.net/Vv7GgOGQbSyClWJqhyP0VQ/${imageId}/public`
 }
-
-const AI_WHITE_ICON = makeImageUrl('b1357e23-2fc6-4dc3-855a-7a213b1fa100')
-const AI_BLACK_ICON = makeImageUrl('91ee0bff-cfe3-4e2d-64e5-fadbd9a3a200')
 
 closeIframe = function () {
     if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
@@ -51,9 +53,20 @@ const setPropValues = (newprops) => {
     }
 }
 
+const SendTempDataToInterface = function (event) {
+    const { type } = event.data;
+    console.log(type, 'type', tempDataToSend, '23432345');
+    if (type === 'interfaceLoaded' && tempDataToSend) {
+        document.getElementById('iframe-component').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
+        window.removeEventListener('message', SendTempDataToInterface);
+        tempDataToSend = null;
+    }
+}
+
 loadContent = function () {
     if (bodyLoaded) return;
     // Append the link element to the head of the document
+    window.addEventListener('message', SendTempDataToInterface, { once: true });
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
@@ -72,7 +85,6 @@ loadContent = function () {
             </button>
         <iframe id="iframe-component" title="iframe"></iframe>
   `
-
         const chatBotIcon = document.createElement('div')
         chatBotIcon.id = 'interfaceEmbed'
 
@@ -98,19 +110,26 @@ loadContent = function () {
     bodyLoaded = true;
     updateProps({ ...props })
 }
+
 document.addEventListener("DOMContentLoaded", loadContent);
 if (document?.body) loadContent()
+
+const iframeComponent = document.getElementById('iframe-component');
+if (iframeComponent) {
+    iframeComponent.onload = function () {
+        console.log('ifram onload and remove event listener', tempDataToSend, 'tempDataToSend');
+        iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
+    }
+}
 
 let config = ''
 let title = 'Via socket'
 let buttonName = 'open'
 let className = 'popup'
 
-
 InitializeInterface = function () {
     iframeController()
 }
-
 
 SendDataToInterface = function (dataToSend) {
     if (dataToSend.theme) {
@@ -122,16 +141,8 @@ SendDataToInterface = function (dataToSend) {
     else if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
         updateProps({ fullScreen: dataToSend.fullScreen });
     }
-
-    const messageType = 'interfaceData'
-    const iframeComponent = document.getElementById('iframe-component')
-
-    if (iframeComponent) {
-        iframeComponent.onload = function () {
-            iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
-        }
-    }
     if (dataToSend && iframeComponent) {
+        tempDataToSend = dataToSend;
         iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
     }
 }
