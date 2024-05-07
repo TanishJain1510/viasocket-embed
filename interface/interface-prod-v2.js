@@ -3,11 +3,23 @@
 const urlToViasocket = `https://face.viasocket.com/i`;
 const styleUrl = 'https://interface-embed.viasocket.com/style-prod.css';
 const loginurl = 'https://flow-api.viasocket.com/interfaces/loginuser'
-
+let tempDataToSend = null;
 let bodyLoaded = false;
+const messageType = 'interfaceData'
+let props = {};
 
 const interfaceScript = document.getElementById('interface-main-script');
-let props = {};
+function SendTempDataToInterface(event) {
+    const { type } = event.data;
+    console.log(type, 'type', tempDataToSend, '23432345');
+    console.log(document.getElementById('iframe-parent-container'), 121234123451234)
+    if (type === 'interfaceLoaded' && tempDataToSend) {
+        document.getElementById('iframe-parent-container').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
+        tempDataToSend = null;
+    }
+}
+window.addEventListener('message', SendTempDataToInterface);
+
 if (interfaceScript) {
     // Create an object to store the extracted attributes
     const attributes = ['interfaceId', 'embedToken', 'threadId', 'bridgeName', 'variables', 'onOpen', 'onClose', 'theme', 'className', 'style', 'environment', 'fullScreen'];
@@ -64,6 +76,7 @@ loadContent = function () {
         const parentContainer = document.createElement('div');
         parentContainer.id = 'iframe-parent-container';
         parentContainer.className = 'popup-parent-container'
+        parentContainer.style.display = 'none'
 
         parentContainer.innerHTML = `
             <button id='close-button' onclick="closeIframe()">
@@ -77,6 +90,7 @@ loadContent = function () {
 
         const imgElement = document.createElement('img');
         imgElement.id = 'popup-interfaceEmbed';
+        imgElement.className = 'chatbot-icon'
         imgElement.alt = 'Ask Ai';
         imgElement.src = AI_BLACK_ICON
 
@@ -113,8 +127,6 @@ InitializeInterface = function () {
 SendDataToInterface = function (dataToSend) {
     if (dataToSend.theme) {
         updateProps({ theme: dataToSend.theme || 'dark' })
-        // theme = dataToSend.theme || 'dark'
-        // document.getElementById("popup-interfaceEmbed").src = theme === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
     }
     if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
         updateProps({ fullScreen: dataToSend.fullScreen });
@@ -123,16 +135,17 @@ SendDataToInterface = function (dataToSend) {
         updateProps({ fullScreen: dataToSend.fullScreen });
     }
 
-    const messageType = 'interfaceData'
-    const iframeComponent = document.getElementById('iframe-component')
-    console.log(iframeComponent, 'iframecomponent')
-    console.log(dataToSend, 'dataToSend')
+    const iframeComponent = document.getElementById('iframe-component');
+    console.log('iframeComponent', iframeComponent);
+    console.log('dataToSend', dataToSend);
     if (iframeComponent) {
         iframeComponent.onload = function () {
             iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+            window.removeEventListener('message', SendTempDataToInterface)
         }
     }
     if (dataToSend && iframeComponent) {
+        tempDataToSend = dataToSend;
         iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
     }
 }

@@ -64,6 +64,7 @@ loadContent = function () {
         const parentContainer = document.createElement('div');
         parentContainer.id = 'iframe-parent-container';
         parentContainer.className = 'popup-parent-container'
+        parentContainer.style.display = 'none'
 
         parentContainer.innerHTML = `
             <button id='close-button' onclick="closeIframe()">
@@ -77,6 +78,7 @@ loadContent = function () {
 
         const imgElement = document.createElement('img');
         imgElement.id = 'popup-interfaceEmbed';
+        imgElement.className = 'chatbot-icon'
         imgElement.alt = 'Ask Ai';
         imgElement.src = AI_BLACK_ICON
 
@@ -113,8 +115,6 @@ InitializeInterface = function () {
 SendDataToInterface = function (dataToSend) {
     if (dataToSend.theme) {
         updateProps({ theme: dataToSend.theme || 'dark' })
-        // theme = dataToSend.theme || 'dark'
-        // document.getElementById("popup-interfaceEmbed").src = theme === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
     }
     if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
         updateProps({ fullScreen: dataToSend.fullScreen });
