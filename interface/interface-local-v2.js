@@ -53,20 +53,24 @@ const setPropValues = (newprops) => {
     }
 }
 
-const SendTempDataToInterface = function (event) {
+function SendTempDataToInterface(event) {
     const { type } = event.data;
     console.log(type, 'type', tempDataToSend, '23432345');
-    if (type === 'interfaceLoaded' && tempDataToSend) {
-        document.getElementById('iframe-component').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
+    if (type === 'interfaceLoaded') {
+        if (tempDataToSend) {
+            console.log('data sent')
+            document.getElementById('iframe-component').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
+            tempDataToSend = null;
+        }
         window.removeEventListener('message', SendTempDataToInterface);
-        tempDataToSend = null;
+        console.log("interfaceLoaded event received")
     }
 }
 
 loadContent = function () {
     if (bodyLoaded) return;
-    // Append the link element to the head of the document
-    window.addEventListener('message', SendTempDataToInterface, { once: true });
+
+    window.addEventListener('message', SendTempDataToInterface);
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
