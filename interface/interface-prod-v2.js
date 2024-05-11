@@ -53,9 +53,13 @@ const setPropValues = (newprops) => {
     }
 }
 
+// Set a timeout to automatically remove the event listener after 60 seconds
+const timeoutId = setTimeout(() => {
+    window.removeEventListener('message', SendTempDataToInterface);
+    console.log("Event listener removed after 60 seconds");
+}, 60000);
 function SendTempDataToInterface(event) {
     const { type } = event.data;
-    console.log(type, 'type', tempDataToSend, '23432345');
     if (type === 'interfaceLoaded') {
         if (tempDataToSend) {
             console.log('data sent')
@@ -63,7 +67,8 @@ function SendTempDataToInterface(event) {
             tempDataToSend = null;
         }
         window.removeEventListener('message', SendTempDataToInterface);
-        console.log("interfaceLoaded event received")
+        clearTimeout(timeoutId);
+        console.log("interfaceLoaded and event listener removed");
     }
 }
 
