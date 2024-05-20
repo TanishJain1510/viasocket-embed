@@ -30,8 +30,8 @@ function makeImageUrl(imageId) {
 }
 
 closeChatbot = function () {
-    if (document.getElementById('chatbot-parent-container')?.style?.display === 'block') {
-        document.getElementById('chatbot-parent-container').style.display = 'none'
+    if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
+        document.getElementById('iframe-parent-container').style.display = 'none'
         document.body.style.overflow = 'auto'
         document.getElementById('interfaceEmbed').style.display = 'unset'
         window.parent?.postMessage({ type: 'close', data: {} }, '*')
@@ -47,9 +47,9 @@ const setPropValues = (newprops) => {
     if (newprops.theme) {
         document.getElementById("popup-interfaceEmbed").src = newprops.theme === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
     } else if (newprops.fullScreen === true || newprops.fullScreen === 'true') {
-        document.getElementById('chatbot-parent-container')?.classList.add('full-screen')
+        document.getElementById('iframe-parent-container')?.classList.add('full-screen')
     } else if (newprops.fullScreen === false || newprops.fullScreen === 'false') {
-        document.getElementById('chatbot-parent-container')?.classList.remove('full-screen')
+        document.getElementById('iframe-parent-container')?.classList.remove('full-screen')
     }
 }
 
@@ -80,12 +80,12 @@ loadContent = function () {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = styleUrl;
+    link.href = ('./style.css');
     document.head.appendChild(link);
 
-    if (!document.getElementById('chatbot-parent-container')) {
+    if (!document.getElementById('iframe-parent-container')) {
         const parentContainer = document.createElement('div');
-        parentContainer.id = 'chatbot-parent-container';
+        parentContainer.id = 'iframe-parent-container';
         parentContainer.className = 'popup-parent-container'
         parentContainer.style.display = 'none'
 
@@ -132,7 +132,14 @@ if (iframeComponent) {
     }
 }
 
-let config = ''
+let config = {
+    "type": "popup",
+    "height": "100",
+    "heightUnit": "%",
+    "width": "50",
+    "widthUnit": "%",
+    "buttonName": ""
+}
 let title = 'Via socket'
 let buttonName = 'Chatbot'
 let className = 'popup'
@@ -185,7 +192,7 @@ loadChatbotEmbed = async function () {
             return data
         })
         .then((data) => {
-            if (!document.getElementById('chatbot-parent-container')) return;
+            if (!document.getElementById('iframe-parent-container')) return;
             config = data?.data?.config
             modifiedUrl = modifiedUrl.concat(`interfaceDetails=${JSON.stringify(data.data)}`)
             const parts = document.getElementById('iframe-component')?.src?.split('?')
@@ -203,20 +210,21 @@ loadChatbotEmbed = async function () {
                 }
 
                 if (config.type) {
-                    document.getElementById('chatbot-parent-container')?.classList.remove(`${className}-parent-container`)
+                    document.getElementById('iframe-parent-container')?.classList.remove(`${className}-parent-container`)
                     document.getElementById('interfaceEmbed')?.classList.remove(`${className}-interfaceEmbed`)
                     className = config.type
                 }
             }
-            document.getElementById('chatbot-parent-container')?.classList.add(`${className}-parent-container`)
+            document.getElementById('iframe-parent-container')?.classList.add(`${className}-parent-container`)
             document.getElementById('interfaceEmbed')?.classList.add(`${className}-interfaceEmbed`)
 
             if (className === 'all_space') {
-                document.getElementById('chatbot-parent-container').style.height = '100%'
-                document.getElementById('chatbot-parent-container').style.width = '100%'
+                document.getElementById('iframe-parent-container').style.height = '100%'
+                document.getElementById('iframe-parent-container').style.width = '100%'
             } else {
-                document.getElementById('chatbot-parent-container').style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh'
-                document.getElementById('chatbot-parent-container').style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw'
+                console.log(config, 234234)
+                document.getElementById('iframe-parent-container').style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh'
+                document.getElementById('iframe-parent-container').style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw'
             }
         })
         .catch((error) => {
@@ -226,9 +234,9 @@ loadChatbotEmbed = async function () {
 
 openChatbot = function () {
     window.parent?.postMessage({ type: 'open', data: {} }, '*')
-    if (document.getElementById('interfaceEmbed') && document.getElementById('chatbot-parent-container')) {
+    if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
         document.getElementById('interfaceEmbed').style.display = 'none'
-        document.getElementById('chatbot-parent-container').style.display = 'block'
+        document.getElementById('iframe-parent-container').style.display = 'block'
         // document.getElementById('title').innerText = title || 'Viasocket'
         document.body.style.overflow = 'hidden'
     }
