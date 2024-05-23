@@ -1,6 +1,6 @@
 /* eslint-disable */
 const urlToViasocket = `http://localhost:3000/i`
-const styleUrl = 'https://interface-embed.viasocket.com/style-local.css';
+const styleUrl = 'https:/chatbot-embed.viasocket.com/style.css';
 const loginurl = 'http://localhost:7072/chatbot/loginuser';
 
 let tempDataToSend = null;
@@ -80,7 +80,7 @@ loadContent = function () {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = ('./style.css');
+    link.href = styleUrl;
     document.head.appendChild(link);
 
     if (!document.getElementById('iframe-parent-container')) {

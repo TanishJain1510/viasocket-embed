@@ -1,7 +1,7 @@
 /* eslint-disable */
-const urlToViasocket = `http://localhost:3000/i`
-const styleUrl = 'https://interface-embed.viasocket.com/style-local.css';
-const loginurl = 'http://localhost:7072/chatbot/loginuser';
+const urlToViasocket = `https://chatbot.viasocket.com/i`
+const styleUrl = 'https:/chatbot-embed.viasocket.com/style.css';
+const loginurl = 'https://routes.msg91.com/api/proxy/1258584/29gjrmh24/chatbot/loginuser';
 
 let tempDataToSend = null;
 let bodyLoaded = false;
