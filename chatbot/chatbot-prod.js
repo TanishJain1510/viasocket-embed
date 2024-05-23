@@ -80,7 +80,7 @@ loadContent = function () {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = ('./style.css');
+    link.href = styleUrl;
     document.head.appendChild(link);
 
     if (!document.getElementById('iframe-parent-container')) {
