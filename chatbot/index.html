@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="setone()">button1</button>
+    <button onclick="settwo()">button2</button>
+    <script id="chatbot-main-script"
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2MDk1IiwiY2hhdGJvdF9pZCI6IjY2NGY0NjQ5MmYzYjRmOWIxNzdiOGY3NSIsInVzZXJfaWQiOiIyMzQ1IiwiaWF0IjoxNTE2MjM5MDIyfQ.razafhvKKZGuG3V_6ZVBqPkGmAsPz_tDeY7BjAGvEXI"
+        src="./chatbot-local.js"></script>
+    <script>
+        function setone() {
+            window.SendDataToChatbot({
+                "threadId": "button1",
+            });
+        }
+        function settwo() {
+            window.SendDataToChatbot({
+                "threadId": "button2",
+            });
+        }
+    </script>
+</body>
+
+</html>

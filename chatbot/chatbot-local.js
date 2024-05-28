@@ -1,6 +1,6 @@
 /* eslint-disable */
-const urlToViasocket = `http://localhost:3000/i`
-const styleUrl = 'https:/chatbot-embed.viasocket.com/style-local.css';
+const urlToViasocket = `http://localhost:3001/i`
+const styleUrl = 'https://chatbot-embed.viasocket.com/style-local.css';
 const loginurl = 'http://localhost:7072/chatbot/loginuser';
 
 let tempDataToSend = null;
