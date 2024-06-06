@@ -12,6 +12,19 @@ const AI_BLACK_ICON = makeImageUrl('91ee0bff-cfe3-4e2d-64e5-fadbd9a3a200')
 
 const interfaceScript = document.getElementById('chatbot-main-script');
 
+
+const chatBotIcon = document.createElement('div')
+chatBotIcon.id = 'interfaceEmbed'
+
+const imgElement = document.createElement('img');
+imgElement.id = 'popup-interfaceEmbed';
+imgElement.className = 'chatbot-icon'
+imgElement.alt = 'Ask Ai';
+imgElement.src = AI_BLACK_ICON
+
+chatBotIcon.appendChild(imgElement);
+document.body.appendChild(chatBotIcon);
+
 if (interfaceScript) {
     // Create an object to store the extracted attributes
     const attributes = ['interfaceId', 'embedToken', 'threadId', 'bridgeName', 'variables', 'onOpen', 'onClose', 'theme', 'className', 'style', 'environment', 'fullScreen'];
@@ -72,93 +85,7 @@ function SendTempDataToChatbot(event) {
         console.log("interfaceLoaded and event listener removed");
     }
 }
-
-loadContent = function () {
-    if (bodyLoaded) return;
-
-    window.addEventListener('message', SendTempDataToChatbot);
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = styleUrl;
-    document.head.appendChild(link);
-
-    if (!document.getElementById('iframe-parent-container')) {
-        const parentContainer = document.createElement('div');
-        parentContainer.id = 'iframe-parent-container';
-        parentContainer.className = 'popup-parent-container'
-        parentContainer.style.display = 'none'
-
-        parentContainer.innerHTML = `
-            <button id='close-button' onclick="closeChatbot()">
-            <svg width="35px" height="35px" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(4.640000000000001,4.640000000000001), scale(0.71)"><rect x="-3.2" y="-3.2" width="38.40" height="38.40" rx="0" fill="#ffffff" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>cross-square</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-206.000000, -1037.000000)" fill="#000000"> <path d="M226.95,1056.54 C227.34,1056.93 227.34,1057.56 226.95,1057.95 C226.559,1058.34 225.926,1058.34 225.536,1057.95 L222,1054.41 L218.464,1057.95 C218.074,1058.34 217.441,1058.34 217.05,1057.95 C216.66,1057.56 216.66,1056.93 217.05,1056.54 L220.586,1053 L217.05,1049.46 C216.66,1049.07 216.66,1048.44 217.05,1048.05 C217.441,1047.66 218.074,1047.66 218.464,1048.05 L222,1051.59 L225.536,1048.05 C225.926,1047.66 226.559,1047.66 226.95,1048.05 C227.34,1048.44 227.34,1049.07 226.95,1049.46 L223.414,1053 L226.95,1056.54 L226.95,1056.54 Z M234,1037 L210,1037 C207.791,1037 206,1038.79 206,1041 L206,1065 C206,1067.21 207.791,1069 210,1069 L234,1069 C236.209,1069 238,1067.21 238,1065 L238,1041 C238,1038.79 236.209,1037 234,1037 L234,1037 Z" id="cross-square" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
-            </button>
-        <iframe id="iframe-component" title="iframe"></iframe>
-  `
-        const chatBotIcon = document.createElement('div')
-        chatBotIcon.id = 'interfaceEmbed'
-
-        const imgElement = document.createElement('img');
-        imgElement.id = 'popup-interfaceEmbed';
-        imgElement.className = 'chatbot-icon'
-        imgElement.alt = 'Ask Ai';
-        imgElement.src = AI_BLACK_ICON
-
-        chatBotIcon.appendChild(imgElement);
-        document.body.appendChild(chatBotIcon);
-
-        if (document.getElementById('interface-chatbot')) {
-            document.getElementById('interface-chatbot').appendChild(parentContainer);
-        } else {
-            document.body.appendChild(parentContainer);
-        }
-    }
-    else {
-        closeChatbot()
-        if (document.getElementById('iframe-component')) document.getElementById('iframe-component').src = ''
-    }
-    bodyLoaded = true;
-    updateProps({ ...props })
-}
-
-document.addEventListener("DOMContentLoaded", loadContent);
-if (document?.body) loadContent()
-
-const iframeComponent = document.getElementById('iframe-component');
-if (iframeComponent) {
-    iframeComponent.onload = function () {
-        console.log('ifram onload and remove event listener', tempDataToSend, 'tempDataToSend');
-        iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
-    }
-}
-
-let config = {
-    "type": "popup",
-    "height": "100",
-    "heightUnit": "%",
-    "width": "50",
-    "widthUnit": "%",
-    "buttonName": ""
-}
-let title = 'Via socket'
-let buttonName = 'Chatbot'
-let className = 'popup'
-
-SendDataToChatbot = function (dataToSend) {
-    if (dataToSend.theme) {
-        updateProps({ theme: dataToSend.theme || 'dark' })
-    }
-    if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
-        updateProps({ fullScreen: dataToSend.fullScreen });
-    }
-    else if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
-        updateProps({ fullScreen: dataToSend.fullScreen });
-    }
-    if (dataToSend && iframeComponent) {
-        tempDataToSend = dataToSend;
-        iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
-    }
-}
+const parentContainer = document.createElement('div');
 
 loadChatbotEmbed = async function () {
     const embedToken = document.getElementById('chatbot-main-script')?.getAttribute('embedToken');
@@ -232,6 +159,89 @@ loadChatbotEmbed = async function () {
         })
 }
 
+loadContent = function (parentId = props.parentId) {
+    // if (bodyLoaded) return;
+    window.addEventListener('message', SendTempDataToChatbot);
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = styleUrl;
+    document.head.appendChild(link);
+
+    if (!document.getElementById('iframe-parent-container')) {
+        parentContainer.id = 'iframe-parent-container';
+        parentContainer.className = 'popup-parent-container'
+        parentContainer.style.display = 'none'
+
+        parentContainer.innerHTML = `
+            <button id='close-button' onclick="closeChatbot()">
+            <svg width="35px" height="35px" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(4.640000000000001,4.640000000000001), scale(0.71)"><rect x="-3.2" y="-3.2" width="38.40" height="38.40" rx="0" fill="#ffffff" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>cross-square</title> <desc>Created with Sketch Beta.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-206.000000, -1037.000000)" fill="#000000"> <path d="M226.95,1056.54 C227.34,1056.93 227.34,1057.56 226.95,1057.95 C226.559,1058.34 225.926,1058.34 225.536,1057.95 L222,1054.41 L218.464,1057.95 C218.074,1058.34 217.441,1058.34 217.05,1057.95 C216.66,1057.56 216.66,1056.93 217.05,1056.54 L220.586,1053 L217.05,1049.46 C216.66,1049.07 216.66,1048.44 217.05,1048.05 C217.441,1047.66 218.074,1047.66 218.464,1048.05 L222,1051.59 L225.536,1048.05 C225.926,1047.66 226.559,1047.66 226.95,1048.05 C227.34,1048.44 227.34,1049.07 226.95,1049.46 L223.414,1053 L226.95,1056.54 L226.95,1056.54 Z M234,1037 L210,1037 C207.791,1037 206,1038.79 206,1041 L206,1065 C206,1067.21 207.791,1069 210,1069 L234,1069 C236.209,1069 238,1067.21 238,1065 L238,1041 C238,1038.79 236.209,1037 234,1037 L234,1037 Z" id="cross-square" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
+            </button>
+        <iframe id="iframe-component" title="iframe"></iframe>
+  `
+
+        if (parentId) {
+            document.getElementById(parentId).appendChild(parentContainer);
+        } else {
+            document.body.appendChild(parentContainer);
+        }
+    }
+    else {
+        closeChatbot()
+        if (document.getElementById('iframe-component')) document.getElementById('iframe-component').src = ''
+    }
+
+    // bodyLoaded = true;
+    updateProps({ ...props })
+    document.getElementById('interfaceEmbed').style.display = 'unset'
+    loadChatbotEmbed()
+}
+
+document.addEventListener("DOMContentLoaded", loadContent);
+if (document?.body) loadContent()
+
+const iframeComponent = document.getElementById('iframe-component');
+if (iframeComponent) {
+    iframeComponent.onload = function () {
+        console.log('ifram onload and remove event listener', tempDataToSend, 'tempDataToSend');
+        iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
+    }
+}
+
+let config = {
+    "type": "popup",
+    "height": "100",
+    "heightUnit": "%",
+    "width": "50",
+    "widthUnit": "%",
+    "buttonName": ""
+}
+let title = 'Via socket'
+let buttonName = 'Chatbot'
+let className = 'popup'
+
+SendDataToChatbot = function (dataToSend) {
+    if (dataToSend.parentId || dataToSend.parentId === '') {
+        console.log(props['parentId'], 'pehle wali value')
+        if (!props['parentId']) { document.body.removeChild(parentContainer) } else { document.getElementById(props['parentId'])?.removeChild(parentContainer) }
+        updateProps({ parentId: dataToSend.parentId })
+        loadContent(dataToSend.parentId)
+    }
+    if (dataToSend.theme) {
+        updateProps({ theme: dataToSend.theme || 'dark' })
+    }
+    if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
+        updateProps({ fullScreen: dataToSend.fullScreen });
+    }
+    else if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
+        updateProps({ fullScreen: dataToSend.fullScreen });
+    }
+    if (dataToSend && iframeComponent) {
+        tempDataToSend = dataToSend;
+        iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+    }
+}
+
 openChatbot = function () {
     window.parent?.postMessage({ type: 'open', data: {} }, '*')
     if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
@@ -241,7 +251,7 @@ openChatbot = function () {
         document.body.style.overflow = 'hidden'
     }
 }
-loadChatbotEmbed()
+// loadChatbotEmbed()
 
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
     window.openChatbot()
