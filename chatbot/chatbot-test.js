@@ -1,36 +1,14 @@
 /* eslint-disable */
-const urlToViasocket = `http://localhost:3001/i`
-const styleUrl = 'https://chatbot-embed.viasocket.com/style-local.css';
-const loginurl = 'http://localhost:7072/chatbot/loginuser';
-
+const urlToViasocket = `https://chatbot.viasocket.com/i`
+const styleUrl = 'https://chatbot-embed.viasocket.com/style-prod.css';
+const loginurl = 'https://routes.msg91.com/api/proxy/1258584/29gjrmh24/chatbot/loginuser';
 let tempDataToSend = null;
 let bodyLoaded = false;
 const messageType = 'interfaceData'
 let props = {};
 const AI_WHITE_ICON = makeImageUrl('b1357e23-2fc6-4dc3-855a-7a213b1fa100')
 const AI_BLACK_ICON = makeImageUrl('91ee0bff-cfe3-4e2d-64e5-fadbd9a3a200')
-
 const interfaceScript = document.getElementById('chatbot-main-script');
-
-
-const chatBotIcon = document.createElement('div')
-chatBotIcon.id = 'interfaceEmbed'
-
-const imgElement = document.createElement('img');
-imgElement.id = 'popup-interfaceEmbed';
-imgElement.className = 'chatbot-icon-interfaceEmbed'
-imgElement.alt = 'Ask Ai';
-imgElement.src = AI_BLACK_ICON
-
-chatBotIcon.appendChild(imgElement);
-document.body.appendChild(chatBotIcon);
-
-var link = document.createElement('link');
-link.id = 'chatbotEmbed-style'
-link.rel = 'stylesheet';
-link.type = 'text/css';
-link.href = styleUrl;
-document.head.appendChild(link);
 
 function handleScriptRemoval(mutationsList, observer) {
     for (const mutation of mutationsList) {
@@ -92,12 +70,12 @@ closeChatbot = function () {
     }
 }
 
-const updateProps = (newprops = {}) => {
+const updateProps = (newprops) => {
     props = { ...props, ...newprops }
     setPropValues(newprops)
 }
 const setPropValues = (newprops) => {
-    if (newprops.theme) {
+    if (newprops.theme && document.getElementById("popup-interfaceEmbed")) {
         document.getElementById("popup-interfaceEmbed").src = newprops.theme === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
     } else if (newprops.fullScreen === true || newprops.fullScreen === 'true') {
         document.getElementById('iframe-parent-container')?.classList.add('full-screen-interfaceEmbed')
@@ -125,8 +103,8 @@ function SendTempDataToChatbot(event) {
         console.log("interfaceLoaded and event listener removed");
     }
 }
-const parentContainer = document.createElement('div');
-// let parentContainer = document.getElementById('iframe-parent-container');
+// let parentContainer = document.createElement('div');
+let parentContainer = document.getElementById('iframe-parent-container') || document.createElement('div');
 
 loadChatbotEmbed = async function () {
     const embedToken = document.getElementById('chatbot-main-script')?.getAttribute('embedToken');
@@ -200,13 +178,31 @@ loadChatbotEmbed = async function () {
         })
 }
 
+const chatBotIcon = document.createElement('div')
+chatBotIcon.id = 'interfaceEmbed'
+
+const imgElement = document.createElement('img');
+imgElement.id = 'popup-interfaceEmbed';
+imgElement.className = 'chatbot-icon-interfaceEmbed'
+imgElement.alt = 'Ask Ai';
+imgElement.src = AI_BLACK_ICON
+
+chatBotIcon.appendChild(imgElement);
+document.body.appendChild(chatBotIcon);
+
+var link = document.createElement('link');
+link.id = 'chatbotEmbed-style'
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = styleUrl;
+document.head.appendChild(link);
+
 loadContent = function (parentId = props.parentId || '', bodyLoadedHai = bodyLoaded) {
     console.log(bodyLoadedHai, '=-=-=-=', parentId)
     if (bodyLoadedHai) return;
     window.addEventListener('message', SendTempDataToChatbot);
 
     if (!document.getElementById('iframe-parent-container')) {
-        // parentContainer = document.createElement('div');
         parentContainer.id = 'iframe-parent-container';
         parentContainer.className = 'popup-parent-container'
         parentContainer.style.display = 'none'
@@ -221,10 +217,8 @@ loadContent = function (parentId = props.parentId || '', bodyLoadedHai = bodyLoa
         if (parentId) {
             console.log(1);
             const container = document.getElementById(parentId)
-            if (container) {
-                container.style.position = 'relative'
-                container?.appendChild(parentContainer);
-            }
+            container.style.position = 'relative'
+            container?.appendChild(parentContainer);
         } else if (document.getElementById('interface-chatbot')) {
             console.log(2);
             document.getElementById('interface-chatbot').appendChild(parentContainer);
@@ -299,7 +293,7 @@ openChatbot = function () {
         document.body.style.overflow = 'hidden'
     }
 }
-// loadChatbotEmbed()
+loadChatbotEmbed()
 
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
     window.openChatbot()

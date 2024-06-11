@@ -25,6 +25,46 @@ imgElement.src = AI_BLACK_ICON
 chatBotIcon.appendChild(imgElement);
 document.body.appendChild(chatBotIcon);
 
+var link = document.createElement('link');
+link.id = 'chatbotEmbed-style'
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = styleUrl;
+document.head.appendChild(link);
+
+function handleScriptRemoval(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            for (const removedNode of mutation.removedNodes) {
+                if (removedNode.id === 'chatbot-main-script') {
+                    // Perform your cleanup here
+                    console.log('Script tag removed, performing cleanup...');
+                    const elementToRemove = document.getElementById('iframe-parent-container');
+                    const interfaceEmbed = document.getElementById('interfaceEmbed');
+                    const styleEmbed = document.getElementById('chatbotEmbed-style');
+                    if (interfaceEmbed) {
+                        console.log('removing iframe');
+                        interfaceEmbed.remove();
+                    }
+                    if (elementToRemove) {
+                        console.log('removing button');
+                        elementToRemove.remove();
+                    }
+                    if (styleEmbed) {
+                        console.log('removing style tag');
+                        styleEmbed.remove();
+                    }
+                    // Stop observing after the script tag is removed
+                    observer.disconnect();
+                }
+            }
+        }
+    }
+}
+
+const observer = new MutationObserver(handleScriptRemoval);
+observer.observe(document.head, { childList: true });
+
 if (interfaceScript) {
     // Create an object to store the extracted attributes
     const attributes = ['interfaceId', 'embedToken', 'threadId', 'bridgeName', 'variables', 'onOpen', 'onClose', 'theme', 'className', 'style', 'environment', 'fullScreen'];
@@ -52,7 +92,7 @@ closeChatbot = function () {
     }
 }
 
-const updateProps = (newprops) => {
+const updateProps = (newprops = {}) => {
     props = { ...props, ...newprops }
     setPropValues(newprops)
 }
@@ -86,6 +126,7 @@ function SendTempDataToChatbot(event) {
     }
 }
 const parentContainer = document.createElement('div');
+// let parentContainer = document.getElementById('iframe-parent-container');
 
 loadChatbotEmbed = async function () {
     const embedToken = document.getElementById('chatbot-main-script')?.getAttribute('embedToken');
@@ -159,16 +200,13 @@ loadChatbotEmbed = async function () {
         })
 }
 
-loadContent = function (parentId = props.parentId) {
-    // if (bodyLoaded) return;
+loadContent = function (parentId = props.parentId || '', bodyLoadedHai = bodyLoaded) {
+    console.log(bodyLoadedHai, '=-=-=-=', parentId)
+    if (bodyLoadedHai) return;
     window.addEventListener('message', SendTempDataToChatbot);
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = styleUrl;
-    document.head.appendChild(link);
 
     if (!document.getElementById('iframe-parent-container')) {
+        // parentContainer = document.createElement('div');
         parentContainer.id = 'iframe-parent-container';
         parentContainer.className = 'popup-parent-container'
         parentContainer.style.display = 'none'
@@ -181,11 +219,18 @@ loadContent = function (parentId = props.parentId) {
   `
 
         if (parentId) {
-            document.getElementById(parentId).appendChild(parentContainer);
+            console.log(1);
+            const container = document.getElementById(parentId)
+            if (container) {
+                container.style.position = 'relative'
+                container?.appendChild(parentContainer);
+            }
         } else if (document.getElementById('interface-chatbot')) {
+            console.log(2);
             document.getElementById('interface-chatbot').appendChild(parentContainer);
         }
         else {
+            console.log(3);
             document.body.appendChild(parentContainer);
         }
     }
@@ -194,7 +239,7 @@ loadContent = function (parentId = props.parentId) {
         if (document.getElementById('iframe-component-interfaceEmbed')) document.getElementById('iframe-component-interfaceEmbed').src = ''
     }
 
-    // bodyLoaded = true;
+    bodyLoaded = true;
     updateProps({ ...props })
     document.getElementById('interfaceEmbed').style.display = 'unset'
     loadChatbotEmbed()
@@ -228,7 +273,7 @@ SendDataToChatbot = function (dataToSend) {
         console.log(props['parentId'], 'pehle wali value')
         if (!props['parentId']) { document.body.removeChild(parentContainer) } else { document.getElementById(props['parentId'])?.removeChild(parentContainer) }
         updateProps({ parentId: dataToSend.parentId })
-        loadContent(dataToSend.parentId)
+        loadContent(dataToSend.parentId, false)
     }
     if (dataToSend.theme) {
         updateProps({ theme: dataToSend.theme || 'dark' })
