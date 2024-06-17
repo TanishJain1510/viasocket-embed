@@ -10,6 +10,7 @@
 <body>
     <button onclick="setone()">button1</button>
     <button onclick="settwo()">button2</button>
+    <button onclick="setthree()">button3</button>
     <div style="display: flex;">
         <div id="chatbot-container"
             style="background-color: rgb(156, 170, 212); width: 70%; height: 100vh; position: relative;">
@@ -21,21 +22,28 @@
     </div>
 
     <script id="chatbot-main-script"
-        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2MDk1IiwiY2hhdGJvdF9pZCI6IjY2NGY0NjQ5MmYzYjRmOWIxNzdiOGY3NSIsInVzZXJfaWQiOiIyMzQ1IiwiaWF0IjoxNTE2MjM5MDIyfQ.razafhvKKZGuG3V_6ZVBqPkGmAsPz_tDeY7BjAGvEXI"
-        src="./chatbot-local.js"></script>
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGF0Ym90X2lkIjoiNjY1MDYyOGFkNDhlMjBlNjFjZjcwMWEwIiwib3JnX2lkIjoiMTI3NyIsInVzZXJfaWQiOiIzMTkwIiwiaWF0IjoxNzE4MzY2Njg4fQ.Z5UCUP5hUc1kJ6PHccwtcIW-MCI8C_AlmkUUluTHqrk"
+        src="https://chatbot-embed.viasocket.com/chatbot-prod.js"></script>
     <script>
         function setone() {
             window.SendDataToChatbot({
                 "threadId": "button1",
-                "id": "chatbot-container",
-                "fullScreen": "true"
+                "parentId": "chatbot-container",
+                "fullScreen": "true",
+                "hideCloseButton": "true",
             });
         }
         function settwo() {
             window.SendDataToChatbot({
-                "threadId": "button2",
-                "id": "chatbot-second-container",
-                "fullScreen": "true"
+                "parentId": "chatbot-second-container",
+                "fullScreen": "true",
+                "hideCloseButton": "false",
+            });
+        }
+        function setthree() {
+            window.SendDataToChatbot({
+                "parentId": "",
+                "fullScreen": false
             });
         }
     </script>
