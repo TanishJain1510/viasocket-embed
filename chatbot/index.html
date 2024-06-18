@@ -22,29 +22,31 @@
     </div>
 
     <script id="chatbot-main-script"
-        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGF0Ym90X2lkIjoiNjY1MDYyOGFkNDhlMjBlNjFjZjcwMWEwIiwib3JnX2lkIjoiMTI3NyIsInVzZXJfaWQiOiIzMTkwIiwiaWF0IjoxNzE4MzY2Njg4fQ.Z5UCUP5hUc1kJ6PHccwtcIW-MCI8C_AlmkUUluTHqrk"
-        src="https://chatbot-embed.viasocket.com/chatbot-prod.js"></script>
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGF0Ym90X2lkIjoiNjY1MDYyOGFkNDhlMjBlNjFjZjcwMWEwIiwib3JnX2lkIjoiMTI3NyIsInVzZXJfaWQiOiI5MDMiLCJpYXQiOjE3MTg2MjY4MDV9.bNIKBXf9qrJasQT3JyxuLIqdeE-pNHhOIZ8qOwDy6n8"
+        src="./chatbot-test.js"></script>
     <script>
         function setone() {
             window.SendDataToChatbot({
                 "threadId": "button1",
-                "parentId": "chatbot-container",
-                "fullScreen": "true",
-                "hideCloseButton": "true",
+                // "parentId": "chatbot-container",
+                // "fullScreen": "true",
+                // "hideCloseButton": "true",
             });
         }
         function settwo() {
             window.SendDataToChatbot({
-                "parentId": "chatbot-second-container",
-                "fullScreen": "true",
-                "hideCloseButton": "false",
+                "threadId": "button3",
+                // "parentId": "chatbot-second-container",
+                // "fullScreen": "true",
+                // "hideCloseButton": "false",
             });
         }
         function setthree() {
-            window.SendDataToChatbot({
-                "parentId": "",
-                "fullScreen": false
-            });
+            // window.SendDataToChatbot({
+            //     "parentId": "",
+            //     "fullScreen": false
+            // });
+            window.reloadChats();
         }
     </script>
 </body>

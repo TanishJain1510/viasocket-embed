@@ -351,6 +351,9 @@ openChatbot = function () {
         document.body.style.overflow = 'hidden'
     }
 }
+reloadChats = function () {
+    iframeComponent.contentWindow?.postMessage({ type: 'refresh', reload: true }, '*')
+}
 // loadChatbotEmbed()
 
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {

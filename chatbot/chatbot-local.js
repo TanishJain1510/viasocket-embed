@@ -352,6 +352,9 @@ openChatbot = function () {
     }
 }
 // loadChatbotEmbed()
+reloadChats = function () {
+    iframeComponent.contentWindow?.postMessage({ type: 'refresh', reload: true }, '*')
+}
 
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
     window.openChatbot()
