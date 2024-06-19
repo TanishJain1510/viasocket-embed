@@ -249,7 +249,7 @@ loadChatbotEmbed = async function () {
 const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = bodyLoaded) {
     console.log(bodyLoadedHai, '=-=-=-=', parentId, 'new value');
     if (bodyLoadedHai) return;
-
+    window.addEventListener('message', SendTempDataToChatbot);
     if (!parentContainer) {
         parentContainer = document.createElement('div');
         parentContainer.id = 'iframe-parent-container';
