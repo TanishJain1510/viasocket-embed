@@ -144,7 +144,7 @@ closeChatbot = function () {
     if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
         document.getElementById('iframe-parent-container').style.display = 'none'
         document.body.style.overflow = 'auto'
-        document.getElementById('interfaceEmbed').style.display = props?.hideCloseButton ? 'none' : 'unset'
+        if(document.getElementById('interfaceEmbed')) {document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset';}
         window.parent?.postMessage({ type: 'close', data: {} }, '*')
         return
     }
@@ -257,7 +257,7 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
         parentContainer.style.display = 'none';
         parentContainer.innerHTML = `
        ${closebutton}
-        <iframe id="iframe-component-interfaceEmbed" title="iframe"></iframe>
+        <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin"></iframe>
       `;
     }
 
@@ -308,14 +308,15 @@ let className = 'popup'
 SendDataToChatbot = function (dataToSend) {
     if ('parentId' in dataToSend) {
         console.log(props['parentId'], 'previous value');
-        if (props['parentId'] !== dataToSend.parentId) {
-            if (!props['parentId'] && parentContainer && document.body.contains(parentContainer)) {
-                document.body.removeChild(parentContainer);
-            } else if (props['parentId']) {
-                const existingParent = document.getElementById(props['parentId']);
-                if (existingParent && parentContainer) {
+        const previousParentId = props['parentId'];
+        if (previousParentId !== dataToSend.parentId) {
+            if (previousParentId) {
+                const existingParent = document.getElementById(previousParentId);
+                if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
                     existingParent.removeChild(parentContainer);
                 }
+            } else if (parentContainer && document.body.contains(parentContainer)) {
+                document.body.removeChild(parentContainer);
             }
             updateProps({ parentId: dataToSend.parentId });
             loadContent(dataToSend.parentId, false);
