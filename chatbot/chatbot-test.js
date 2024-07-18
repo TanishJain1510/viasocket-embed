@@ -1,7 +1,7 @@
 /* eslint-disable */
-const urlToViasocket = `http://localhost:3001/i`
-const styleUrl = 'https://chatbot-embed.viasocket.com/style-local.css';
-const loginurl = 'http://localhost:7072/chatbot/loginuser';
+const urlToViasocket = `https://chatbot.viasocket.com/i`
+const styleUrl = 'https://chatbot-embed.viasocket.com/style-prod.css';
+const loginurl = 'https://routes.msg91.com/api/proxy/1258584/29gjrmh24/chatbot/loginuser';
 
 let tempDataToSend = null;
 let bodyLoaded = false;
@@ -257,7 +257,7 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
         parentContainer.style.display = 'none';
         parentContainer.innerHTML = `
        ${closebutton}
-       <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin"></iframe>
+        <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin"></iframe>
       `;
     }
 
@@ -353,6 +353,7 @@ openChatbot = function () {
     }
 }
 // loadChatbotEmbed()
+
 reloadChats = function () {
     iframeComponent.contentWindow?.postMessage({ type: 'refresh', reload: true }, '*')
 }
