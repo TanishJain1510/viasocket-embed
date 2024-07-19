@@ -173,34 +173,7 @@ function SendTempDataToChatbot(event) {
 let parentContainer = null;
 // const parentContainer = document.createElement('div');
 // let parentContainer = document.getElementById('iframe-parent-container');
-handleConfig=function(){
-    if (config) {
-        if (config.title) {
-            title = config.title
-        }
-        if (config.buttonName) {
-            buttonName = config.buttonName
-            document.getElementById('interfaceEmbed').innerText = buttonName
-        }
 
-        if (config.type) {
-            document.getElementById('iframe-parent-container')?.classList.remove(`${className}-parent-container`)
-            document.getElementById('interfaceEmbed')?.classList.remove(`${className}-interfaceEmbed`)
-            className = config.type
-        }
-    }
-    document.getElementById('iframe-parent-container')?.classList.add(`${className}-parent-container`)
-    document.getElementById('interfaceEmbed')?.classList.add(`${className}-interfaceEmbed`)
-
-    if (className === 'all_space') {
-        document.getElementById('iframe-parent-container').style.height = '100%'
-        document.getElementById('iframe-parent-container').style.width = '100%'
-        openChatbot()
-    } else {
-        document.getElementById('iframe-parent-container').style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh'
-        document.getElementById('iframe-parent-container').style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw'
-    }
-}
 loadChatbotEmbed = async function () {
     const embedToken = document.getElementById('chatbot-main-script')?.getAttribute('embedToken');
     let modifiedUrl = `${urlToViasocket}?`
@@ -242,8 +215,31 @@ loadChatbotEmbed = async function () {
             if (baseUrl !== urlToViasocket && document.getElementById('iframe-component-interfaceEmbed')) {
                 document.getElementById('iframe-component-interfaceEmbed').src = modifiedUrl
             }
-            handleConfig()
-          
+            if (config) {
+                if (config.title) {
+                    title = config.title
+                }
+                if (config.buttonName) {
+                    buttonName = config.buttonName
+                    document.getElementById('interfaceEmbed').innerText = buttonName
+                }
+
+                if (config.type) {
+                    document.getElementById('iframe-parent-container')?.classList.remove(`${className}-parent-container`)
+                    document.getElementById('interfaceEmbed')?.classList.remove(`${className}-interfaceEmbed`)
+                    className = config.type
+                }
+            }
+            document.getElementById('iframe-parent-container')?.classList.add(`${className}-parent-container`)
+            document.getElementById('interfaceEmbed')?.classList.add(`${className}-interfaceEmbed`)
+
+            if (className === 'all_space') {
+                document.getElementById('iframe-parent-container').style.height = '100%'
+                document.getElementById('iframe-parent-container').style.width = '100%'
+            } else {
+                document.getElementById('iframe-parent-container').style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh'
+                document.getElementById('iframe-parent-container').style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw'
+            }
         })
         .catch((error) => {
             console.log('Fetch error:', error)
@@ -328,10 +324,6 @@ SendDataToChatbot = function (dataToSend) {
     }
     if ('hideCloseButton' in dataToSend) {
         updateProps({ hideCloseButton: dataToSend.hideCloseButton || false })
-    }
-    if ('config' in dataToSend) {
-        config={...config, ...dataToSend?.config}
-        handleConfig()
     }
     if ('hideIcon' in dataToSend) {
         updateProps({ hideIcon: dataToSend.hideIcon || false })
