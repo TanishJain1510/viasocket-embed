@@ -334,8 +334,11 @@ SendDataToChatbot = function (dataToSend) {
     if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
         updateProps({ fullScreen: dataToSend.fullScreen });
     }
-    else if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
+    if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
         updateProps({ fullScreen: dataToSend.fullScreen });
+    }
+    if (dataToSend.askAi) {
+        iframeComponent.contentWindow?.postMessage({ type: "askAi", data: dataToSend.askAi || "" }, '*')
     }
     if (dataToSend && iframeComponent) {
         tempDataToSend = dataToSend;
@@ -352,10 +355,14 @@ openChatbot = function () {
         document.body.style.overflow = 'hidden'
     }
 }
+// loadChatbotEmbed()
 reloadChats = function () {
     iframeComponent.contentWindow?.postMessage({ type: 'refresh', reload: true }, '*')
 }
-// loadChatbotEmbed()
+
+askAi = function (data) {
+    iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data }, '*')
+}
 
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
     window.openChatbot()
