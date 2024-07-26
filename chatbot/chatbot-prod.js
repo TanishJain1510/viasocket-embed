@@ -144,7 +144,7 @@ closeChatbot = function () {
     if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
         document.getElementById('iframe-parent-container').style.display = 'none'
         document.body.style.overflow = 'auto'
-        if(document.getElementById('interfaceEmbed')) {document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset';}
+        if (document.getElementById('interfaceEmbed')) { document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset'; }
         window.parent?.postMessage({ type: 'close', data: {} }, '*')
         return
     }
@@ -337,12 +337,12 @@ SendDataToChatbot = function (dataToSend) {
     if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
         updateProps({ fullScreen: dataToSend.fullScreen });
     }
-    if (dataToSend.askAi) {
-        iframeComponent.contentWindow?.postMessage({ type: "askAi", data: dataToSend.askAi || "" }, '*')
-    }
     if (dataToSend && iframeComponent) {
         tempDataToSend = dataToSend;
         iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+    }
+    if (dataToSend.askAi) {
+        iframeComponent.contentWindow?.postMessage({ type: "askAi", data: dataToSend || {} }, '*')
     }
 }
 
@@ -362,7 +362,7 @@ reloadChats = function () {
 }
 
 askAi = function (data) {
-    iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data }, '*')
+    iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data || "" }, '*')
 }
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
     window.openChatbot()
