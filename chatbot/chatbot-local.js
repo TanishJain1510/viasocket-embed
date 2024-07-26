@@ -344,6 +344,9 @@ SendDataToChatbot = function (dataToSend) {
         tempDataToSend = dataToSend;
         iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
     }
+    if (dataToSend.askAi) {
+        iframeComponent.contentWindow?.postMessage({ type: "askAi", data: dataToSend || {} }, '*')
+    }
 }
 
 openChatbot = function () {
@@ -361,7 +364,7 @@ reloadChats = function () {
 }
 
 askAi = function (data) {
-    iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data }, '*')
+    iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data || "" }, '*')
 }
 
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
