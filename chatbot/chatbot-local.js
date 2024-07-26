@@ -337,6 +337,9 @@ SendDataToChatbot = function (dataToSend) {
     if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
         updateProps({ fullScreen: dataToSend.fullScreen });
     }
+    if (dataToSend.askAi) {
+        iframeComponent.contentWindow?.postMessage({ type: "askAi", data: dataToSend.askAi || "" }, '*')
+    }
     if (dataToSend && iframeComponent) {
         tempDataToSend = dataToSend;
         iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
