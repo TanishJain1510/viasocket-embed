@@ -146,6 +146,7 @@ closeChatbot = function () {
         document.body.style.overflow = 'auto'
         if (document.getElementById('interfaceEmbed')) { document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset'; }
         window.parent?.postMessage({ type: 'close', data: {} }, '*')
+        iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*');
         return
     }
 }
@@ -351,6 +352,7 @@ SendDataToChatbot = function (dataToSend) {
 
 openChatbot = function () {
     window.parent?.postMessage({ type: 'open', data: {} }, '*')
+    iframeComponent.contentWindow?.postMessage({ type: 'open', data: {} }, '*');
     if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
         document.getElementById('interfaceEmbed').style.display = 'none'
         document.getElementById('iframe-parent-container').style.display = 'block'
