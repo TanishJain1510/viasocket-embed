@@ -258,7 +258,7 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
         parentContainer.style.display = 'none';
         parentContainer.innerHTML = `
        ${closebutton}
-       <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin"></iframe>
+       <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
       `;
     }
 
