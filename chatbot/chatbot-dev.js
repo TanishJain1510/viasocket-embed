@@ -1,5 +1,5 @@
 /* eslint-disable */
-const urlToViasocket = `https://dev-chatbot.viasocket.com`;
+const urlToViasocket = `https://dev-chatbot.viasocket.com/i`;
 const styleUrl = 'https://chatbot-embed.viasocket.com/style-dev.css';
 const loginurl = 'https://routes.msg91.com/api/proxy/1258584/29ipuks30/chatbot/loginuser';
 
