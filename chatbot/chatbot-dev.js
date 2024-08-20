@@ -18,7 +18,7 @@ imgElement.id = 'popup-interfaceEmbed';
 imgElement.className = 'chatbot-icon-interfaceEmbed'
 imgElement.alt = 'Ask Ai';
 imgElement.src = AI_BLACK_ICON
-
+imgElement.style.visibility = 'hidden';
 chatBotIcon.appendChild(imgElement);
 document.body.appendChild(chatBotIcon);
 
@@ -170,10 +170,19 @@ function SendTempDataToChatbot(event) {
         console.log("interfaceLoaded and event listener removed");
     }
 }
-// const parentContainer = document.createElement('div');
+
 let parentContainer = null;
-// const parentContainer = document.createElement('div');
-// let parentContainer = document.getElementById('iframe-parent-container');
+let config = {
+    "type": "popup",
+    "height": "100",
+    "heightUnit": "%",
+    "width": "50",
+    "widthUnit": "%",
+    "buttonName": ""
+}
+let title = 'Via socket'
+let buttonName = 'Chatbot'
+let className = 'popup'
 
 loadChatbotEmbed = async function () {
     const embedToken = document.getElementById('chatbot-main-script')?.getAttribute('embedToken');
@@ -216,25 +225,35 @@ loadChatbotEmbed = async function () {
             if (baseUrl !== urlToViasocket && document.getElementById('iframe-component-interfaceEmbed')) {
                 document.getElementById('iframe-component-interfaceEmbed').src = modifiedUrl
             }
+            const interfaceEmbedElement = document.getElementById('interfaceEmbed');
             if (config) {
                 if (config.title) {
                     title = config.title
                 }
                 if (config.buttonName) {
-                    buttonName = config.buttonName
-                    document.getElementById('interfaceEmbed').innerText = buttonName
+                    buttonName = config.buttonName;
+                    interfaceEmbedElement.innerText = buttonName;
+
+                    // Add a class to show the background color when the button text is shown
+                    interfaceEmbedElement.classList.add('show-bg-color');
+                    // interfaceEmbedElement.style.backgroundColor = config.themeColor || '#000000'; // Default to original color if themeColor is not set
+                } else {
+                    imgElement.style.visibility = 'visible';
+                    interfaceEmbedElement?.classList.remove('show-bg-color');
+                    // Reset the background color
+                    // interfaceEmbedElement.style.backgroundColor = 'transparent'; // or any default background color you want when icon is visible
                 }
 
                 if (config.type) {
                     document.getElementById('iframe-parent-container')?.classList.remove(`${className}-parent-container`)
-                    document.getElementById('interfaceEmbed')?.classList.remove(`${className}-interfaceEmbed`)
+                    interfaceEmbedElement?.classList.remove(`${className}-interfaceEmbed`)
                     className = config.type
                 }
             }
             document.getElementById('iframe-parent-container')?.classList.add(`${className}-parent-container`)
-            document.getElementById('interfaceEmbed')?.classList.add(`${className}-interfaceEmbed`)
+            interfaceEmbedElement?.classList.add(`${className}-interfaceEmbed`)
 
-            if (className === 'all_space') {
+            if (className === 'all_available_space') {
                 document.getElementById('iframe-parent-container').style.height = '100%'
                 document.getElementById('iframe-parent-container').style.width = '100%'
             } else {
@@ -293,18 +312,6 @@ if (iframeComponent) {
         iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
     }
 }
-
-let config = {
-    "type": "popup",
-    "height": "100",
-    "heightUnit": "%",
-    "width": "50",
-    "widthUnit": "%",
-    "buttonName": ""
-}
-let title = 'Via socket'
-let buttonName = 'Chatbot'
-let className = 'popup'
 
 SendDataToChatbot = function (dataToSend) {
     if ('parentId' in dataToSend) {
