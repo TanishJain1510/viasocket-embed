@@ -3,15 +3,16 @@
 .left_slider-interfaceEmbed,
 .right_slider-interfaceEmbed,
 .popup-interfaceEmbed {
-  height: 60px;
-  width: 120px;
+  height: 45px;
+  width: 100px;
   position: fixed;
+  border-radius: 5px 5px 0px 0px !important;
   /* background-color: #3d7bef !important; */
   text-align: center;
   align-content: center;
   color: white;
   letter-spacing: 2px;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
   z-index: 999999999 !important;
 }
