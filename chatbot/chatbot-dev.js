@@ -140,14 +140,37 @@ function makeImageUrl(imageId) {
     return `https://imagedelivery.net/Vv7GgOGQbSyClWJqhyP0VQ/${imageId}/public`
 }
 
+// closeChatbot = function () {
+//     if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
+//         document.getElementById('iframe-parent-container').style.display = 'none'
+//         document.body.style.overflow = 'auto'
+//         if (document.getElementById('interfaceEmbed')) { document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset'; }
+//         window.parent?.postMessage({ type: 'close', data: {} }, '*')
+//         iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*');
+//         return
+//     }
+// }
+
 closeChatbot = function () {
-    if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
-        document.getElementById('iframe-parent-container').style.display = 'none'
-        document.body.style.overflow = 'auto'
-        if (document.getElementById('interfaceEmbed')) { document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset'; }
-        window.parent?.postMessage({ type: 'close', data: {} }, '*')
-        iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*');
-        return
+    const iframeContainer = document.getElementById('iframe-parent-container');
+
+    if (iframeContainer?.style?.display === 'block') {
+        // Apply inline animation for fade out
+        iframeContainer.style.transition = 'opacity 0.2s ease-in-out';
+        iframeContainer.style.opacity = 0;
+
+        // Wait for the animation to finish before hiding the element
+        setTimeout(() => {
+            iframeContainer.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            if (document.getElementById('interfaceEmbed')) {
+                document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset';
+            }
+            window.parent?.postMessage({ type: 'close', data: {} }, '*');
+            iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*');
+        }, 200); // This should match the duration of the transition
+
+        return;
     }
 }
 
@@ -354,14 +377,35 @@ SendDataToChatbot = function (dataToSend) {
     }
 }
 
+// openChatbot = function () {
+//     window.parent?.postMessage({ type: 'open', data: {} }, '*')
+//     iframeComponent.contentWindow?.postMessage({ type: 'open', data: {} }, '*');
+//     if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
+//         document.getElementById('interfaceEmbed').style.display = 'none'
+//         document.getElementById('iframe-parent-container').style.display = 'block'
+//         // document.getElementById('title').innerText = title || 'Viasocket'
+//         document.body.style.overflow = 'hidden'
+//     }
+// }
+
 openChatbot = function () {
-    window.parent?.postMessage({ type: 'open', data: {} }, '*')
+    window.parent?.postMessage({ type: 'open', data: {} }, '*');
     iframeComponent.contentWindow?.postMessage({ type: 'open', data: {} }, '*');
+
     if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
-        document.getElementById('interfaceEmbed').style.display = 'none'
-        document.getElementById('iframe-parent-container').style.display = 'block'
-        // document.getElementById('title').innerText = title || 'Viasocket'
-        document.body.style.overflow = 'hidden'
+        document.getElementById('interfaceEmbed').style.display = 'none';
+        const iframeContainer = document.getElementById('iframe-parent-container');
+        iframeContainer.style.display = 'block';
+
+        // Reset opacity to 0 before applying animation (in case the element was previously shown)
+        iframeContainer.style.opacity = 0;
+        // Apply inline animation
+        iframeContainer.style.transition = 'opacity 0.3s ease-in-out';
+        requestAnimationFrame(() => {
+            iframeContainer.style.opacity = 1;
+        });
+
+        document.body.style.overflow = 'hidden';
     }
 }
 // loadChatbotEmbed()
