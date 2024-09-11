@@ -20,6 +20,11 @@ imgElement.alt = 'Ask Ai';
 imgElement.src = AI_BLACK_ICON
 imgElement.style.visibility = 'hidden';
 chatBotIcon.appendChild(imgElement);
+// Create a span element to hold the button text
+const textElement = document.createElement('span');
+textElement.id = 'popup-interfaceEmbed-text';
+chatBotIcon.appendChild(textElement);
+
 document.body.appendChild(chatBotIcon);
 
 var link = document.createElement('link');
@@ -50,7 +55,6 @@ const closebutton = ` <button id='close-button-interfaceEmbed' onclick="closeCha
 
 const updateProps = (newprops = {}) => {
     props = { ...props, ...newprops }
-    // console.log(props, 12312312312)
     setPropValues(newprops)
 }
 const setPropValues = (newprops) => {
@@ -75,7 +79,6 @@ function createProps() {
                 props[attr] = interfaceScript.getAttribute(attr);
             }
         });
-        console.log('loop pura chal gya hai')
         // updateProps(props);
     } else {
         console.log("Script tag not found");
@@ -88,7 +91,6 @@ function handleScriptRemoval(mutationsList, observer) {
         if (mutation.type === 'childList') {
             for (const addedNode of mutation.addedNodes) {
                 if (addedNode.id === 'chatbot-main-script') {
-                    console.log('Script tag added');
                     interfaceScript = document.getElementById('chatbot-main-script');
                     createProps();
                 }
@@ -101,15 +103,12 @@ function handleScriptRemoval(mutationsList, observer) {
                     const interfaceEmbed = document.getElementById('interfaceEmbed');
                     const styleEmbed = document.getElementById('chatbotEmbed-style');
                     if (interfaceEmbed) {
-                        console.log('removing iframe');
                         interfaceEmbed.remove();
                     }
                     if (elementToRemove) {
-                        console.log('removing button');
                         elementToRemove.remove();
                     }
                     if (styleEmbed) {
-                        console.log('removing style tag');
                         styleEmbed.remove();
                     }
                     // Stop observing after the script tag is removed
@@ -123,33 +122,9 @@ function handleScriptRemoval(mutationsList, observer) {
 const observer = new MutationObserver(handleScriptRemoval);
 observer.observe(document.head, { childList: true });
 
-// if (interfaceScript) {
-//     // Create an object to store the extracted attributes
-//     const attributes = ['interfaceId', 'embedToken', 'threadId', 'bridgeName', 'variables', 'onOpen', 'onClose', 'iconColor', 'className', 'style', 'environment', 'fullScreen'];
-//     attributes.forEach(attr => {
-//         if (interfaceScript.hasAttribute(attr)) {
-//             props[attr] = interfaceScript.getAttribute(attr);
-//         }
-//     });
-//     // console.log(props)
-// } else {
-//     console.log("Script tag not found");
-// }
-
 function makeImageUrl(imageId) {
     return `https://imagedelivery.net/Vv7GgOGQbSyClWJqhyP0VQ/${imageId}/public`
 }
-
-// closeChatbot = function () {
-//     if (document.getElementById('iframe-parent-container')?.style?.display === 'block') {
-//         document.getElementById('iframe-parent-container').style.display = 'none'
-//         document.body.style.overflow = 'auto'
-//         if (document.getElementById('interfaceEmbed')) { document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset'; }
-//         window.parent?.postMessage({ type: 'close', data: {} }, '*')
-//         iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*');
-//         return
-//     }
-// }
 
 closeChatbot = function () {
     const iframeContainer = document.getElementById('iframe-parent-container');
@@ -255,18 +230,21 @@ loadChatbotEmbed = async function () {
                 }
                 if (config.buttonName) {
                     buttonName = config.buttonName;
-                    interfaceEmbedElement.innerText = buttonName;
-
+                    textElement.innerText = buttonName;
                     // Add a class to show the background color when the button text is shown
                     interfaceEmbedElement.classList.add('show-bg-color');
-                    // interfaceEmbedElement.style.backgroundColor = config.themeColor || '#000000'; // Default to original color if themeColor is not set
+                    imgElement.style.visibility = 'hidden';// Hide the icon when button text is shown
                 } else {
-                    imgElement.style.visibility = 'visible';
+                    textElement.innerText = '';
                     interfaceEmbedElement?.classList.remove('show-bg-color');
-                    // Reset the background color
-                    // interfaceEmbedElement.style.backgroundColor = 'transparent'; // or any default background color you want when icon is visible
+                    imgElement.style.visibility = 'visible';// Show the icon when button text is empty
                 }
-
+                if(config.iconUrl){
+                    imgElement.src = config.iconUrl;
+                    interfaceEmbedElement?.classList.remove('show-bg-color');
+                    textElement.innerText = '';
+                    imgElement.style.visibility = 'visible';
+                }
                 if (config.type) {
                     document.getElementById('iframe-parent-container')?.classList.remove(`${className}-parent-container`)
                     interfaceEmbedElement?.classList.remove(`${className}-interfaceEmbed`)
@@ -290,7 +268,6 @@ loadChatbotEmbed = async function () {
 }
 
 const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = bodyLoaded) {
-    console.log(bodyLoadedHai, '=-=-=-=', parentId, 'new value');
     if (bodyLoadedHai) return;
     window.addEventListener('message', SendTempDataToChatbot);
     if (!parentContainer) {
@@ -305,17 +282,14 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
     }
 
     if (parentId) {
-        console.log(1);
         const container = document.getElementById(parentId);
         if (container) {
             container.style.position = 'relative';
             container.appendChild(parentContainer);
         }
     } else if (document.getElementById('interface-chatbot')) {
-        console.log(2);
         document.getElementById('interface-chatbot').appendChild(parentContainer);
     } else {
-        console.log(3);
         document.body.appendChild(parentContainer);
     }
 
@@ -331,7 +305,6 @@ if (document?.body) loadContent()
 const iframeComponent = document.getElementById('iframe-component-interfaceEmbed');
 if (iframeComponent) {
     iframeComponent.onload = function () {
-        console.log('ifram onload and remove event listener', tempDataToSend, 'tempDataToSend');
         iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
     }
 }
@@ -376,17 +349,6 @@ SendDataToChatbot = function (dataToSend) {
         iframeComponent.contentWindow?.postMessage({ type: "askAi", data: dataToSend || {} }, '*')
     }
 }
-
-// openChatbot = function () {
-//     window.parent?.postMessage({ type: 'open', data: {} }, '*')
-//     iframeComponent.contentWindow?.postMessage({ type: 'open', data: {} }, '*');
-//     if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
-//         document.getElementById('interfaceEmbed').style.display = 'none'
-//         document.getElementById('iframe-parent-container').style.display = 'block'
-//         // document.getElementById('title').innerText = title || 'Viasocket'
-//         document.body.style.overflow = 'hidden'
-//     }
-// }
 
 openChatbot = function () {
     window.parent?.postMessage({ type: 'open', data: {} }, '*');
