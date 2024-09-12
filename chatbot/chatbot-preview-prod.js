@@ -232,7 +232,14 @@ updateConfig = function (config = {}) {
             interfaceEmbedElement?.classList.remove('show-bg-color');
             imgElement.style.visibility = 'visible';// Show the icon when button text is empty
         }
-
+        if (config.iconUrl) {
+            imgElement.src = config.iconUrl;
+            interfaceEmbedElement?.classList.remove('show-bg-color');
+            textElement.innerText = '';
+            imgElement.style.visibility = 'visible';
+        } else {
+            imgElement.src = AI_BLACK_ICON
+        }
         if (config.type) {
             document.getElementById('iframe-parent-container')?.classList.remove(`${className}-parent-container`)
             interfaceEmbedElement?.classList.remove(`${className}-interfaceEmbed`)
