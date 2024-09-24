@@ -15,11 +15,11 @@
         <div id="chatbot-container"
             style="background-color: rgb(156, 170, 212); width: 70%; height: 100vh; position: relative;">
             <script id="chatbot-main-script"
-            embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiI1MDg4In0.2hT-Bc7ZouOuFpKgm0_1M6WqaXjc5cYVjr6d6B-2Buw"
+            embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiIxMjM0ZGYifQ.BFFehNvwBEkl-WNOE7-QaZVNw_3eoHvO8_dKWCIdRUk"
             src="./chatbot-local.js"></script>
         </div>
         <div id="chatbot-second-container"
-            style="background-color: rgb(92, 58, 58); width: 30%; height: 100vh; position: relative;">
+            style="background-color: rgb(92, 58, 58); width: 30%; height: 16vh; position: relative;">
 
         </div>
     </div>
@@ -36,21 +36,21 @@
             });
         }
         function settwo() {
-            // window.SendDataToChatbot({
-            //     "threadId": "jain",
-            //     // "parentId": "chatbot-second-container",
-            //     // "fullScreen": "true",
-            //     // "hideCloseButton": "false",
-            // });
-            window.askAi("hello2")
+            window.SendDataToChatbot({
+                "threadId": "jain",
+                "parentId": "chatbot-second-container",
+                "fullScreen": "true",
+                // "hideCloseButton": "false",
+            });
+            // window.askAi("hello2")
         }
         function setthree() {
-            // window.SendDataToChatbot({
-            //     "parentId": "",
-            //     "fullScreen": false
-            // });
+            window.SendDataToChatbot({
+                "parentId": "",
+                "fullScreen": false
+            });
             // window.reloadChats();
-            window.askAi("parakh bhai")
+            // window.askAi("parakh bhai")
         }
         window.addEventListener('message', function (event) {
             console.log(event.data);
@@ -58,6 +58,10 @@
             // }
         });
     </script>
+
+    <!-- <script id="chatbot-main-script"
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiIxMjNzZDRkZiJ9.JoAtoBfP4WnawuqRXSvjTOIJjYQ7G_MHaPXEC_otT7k"
+        src="./chatbot-local.js"></script> -->
 </body>
 
 </html>

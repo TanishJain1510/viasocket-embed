@@ -165,7 +165,6 @@ function SendTempDataToChatbot(event) {
         }
         window.removeEventListener('message', SendTempDataToChatbot);
         clearTimeout(timeoutId);
-        console.log("interfaceLoaded and event listener removed");
     }
 }
 
@@ -280,7 +279,14 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
         <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
       `;
     }
+    changeContainer(parentId);
 
+    bodyLoaded = true;
+    updateProps({ ...props });
+    loadChatbotEmbed();
+};
+
+const changeContainer = function (parentId) {
     if (parentId) {
         const container = document.getElementById(parentId);
         if (container) {
@@ -292,12 +298,7 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
     } else {
         document.body.appendChild(parentContainer);
     }
-
-    bodyLoaded = true;
-    updateProps({ ...props });
-    // if (document.getElementById('interfaceEmbed')) document.getElementById('interfaceEmbed').style.display = 'unset';
-    loadChatbotEmbed();
-};
+}
 
 document.addEventListener("DOMContentLoaded", loadContent);
 if (document?.body) loadContent()
@@ -311,7 +312,6 @@ if (iframeComponent) {
 
 SendDataToChatbot = function (dataToSend) {
     if ('parentId' in dataToSend) {
-        console.log(props['parentId'], 'previous value');
         const previousParentId = props['parentId'];
         if (previousParentId !== dataToSend.parentId) {
             if (previousParentId) {
@@ -323,7 +323,8 @@ SendDataToChatbot = function (dataToSend) {
                 document.body.removeChild(parentContainer);
             }
             updateProps({ parentId: dataToSend.parentId });
-            loadContent(dataToSend.parentId, false);
+            // loadContent(dataToSend.parentId, false);
+            changeContainer(dataToSend?.parentId || "");
         }
     }
     if ('hideCloseButton' in dataToSend) {
