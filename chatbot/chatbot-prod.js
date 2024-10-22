@@ -3,36 +3,40 @@ const urlToViasocket = `https://chatbot.viasocket.com/i`
 const styleUrl = 'https://chatbot-embed.viasocket.com/style-prod.css';
 const loginurl = 'https://routes.msg91.com/api/proxy/1258584/32nghul25/chatbot/loginuser';
 
-let tempDataToSend = null;
-let bodyLoaded = false;
+let tempDataToSend = null
+let bodyLoaded = false
 const messageType = 'interfaceData'
-let props = {};
+let props = {}
+function makeImageUrl(imageId) {
+  return `https://imagedelivery.net/Vv7GgOGQbSyClWJqhyP0VQ/${imageId}/public`
+}
+
 const AI_WHITE_ICON = makeImageUrl('b1357e23-2fc6-4dc3-855a-7a213b1fa100')
 const AI_BLACK_ICON = makeImageUrl('91ee0bff-cfe3-4e2d-64e5-fadbd9a3a200')
-let interfaceScript = document.getElementById('chatbot-main-script');
+let interfaceScript = document.getElementById('chatbot-main-script')
 const chatBotIcon = document.createElement('div')
 chatBotIcon.id = 'interfaceEmbed'
 
-const imgElement = document.createElement('img');
-imgElement.id = 'popup-interfaceEmbed';
+const imgElement = document.createElement('img')
+imgElement.id = 'popup-interfaceEmbed'
 imgElement.className = 'chatbot-icon-interfaceEmbed'
-imgElement.alt = 'Ask Ai';
+imgElement.alt = 'Ask Ai'
 imgElement.src = AI_BLACK_ICON
-imgElement.style.visibility = 'hidden';
-chatBotIcon.appendChild(imgElement);
+imgElement.style.visibility = 'hidden'
+chatBotIcon.appendChild(imgElement)
 // Create a span element to hold the button text
-const textElement = document.createElement('span');
-textElement.id = 'popup-interfaceEmbed-text';
-chatBotIcon.appendChild(textElement);
+const textElement = document.createElement('span')
+textElement.id = 'popup-interfaceEmbed-text'
+chatBotIcon.appendChild(textElement)
 
-document.body.appendChild(chatBotIcon);
+document.body.appendChild(chatBotIcon)
 
-var link = document.createElement('link');
+var link = document.createElement('link')
 link.id = 'chatbotEmbed-style'
-link.rel = 'stylesheet';
-link.type = 'text/css';
-link.href = styleUrl;
-document.head.appendChild(link);
+link.rel = 'stylesheet'
+link.type = 'text/css'
+link.href = styleUrl
+document.head.appendChild(link)
 
 const closebutton = ` <button id='close-button-interfaceEmbed' onclick="closeChatbot()">
           <svg width="35px" height="35px" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
@@ -51,335 +55,383 @@ const closebutton = ` <button id='close-button-interfaceEmbed' onclick="closeCha
               </g>
             </g>
           </svg>
-        </button>`;
+        </button>`
 
 const updateProps = (newprops = {}) => {
-    props = { ...props, ...newprops }
-    setPropValues(newprops)
+  props = { ...props, ...newprops }
+  setPropValues(newprops)
 }
 const setPropValues = (newprops) => {
-    if (newprops.iconColor) {
-        document.getElementById("popup-interfaceEmbed").src = newprops.iconColor === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
-    } if (newprops.fullScreen === true || newprops.fullScreen === 'true') {
-        document.getElementById('iframe-parent-container')?.classList.add('full-screen-interfaceEmbed')
-    } if (newprops.fullScreen === false || newprops.fullScreen === 'false') {
-        document.getElementById('iframe-parent-container')?.classList.remove('full-screen-interfaceEmbed')
-    } if ('hideIcon' in newprops && document.getElementById('interfaceEmbed')) {
-        document.getElementById('interfaceEmbed').style.display = (newprops.hideIcon === true || newprops.hideIcon === 'true') ? 'none' : 'unset';
-    } if ('hideCloseButton' in newprops && document.getElementById('close-button-interfaceEmbed')) {
-        document.getElementById('close-button-interfaceEmbed').style.display = (newprops.hideCloseButton === true || newprops.hideCloseButton === 'true') ? 'none' : 'unset';
-    }
+  if (newprops.iconColor) {
+    document.getElementById('popup-interfaceEmbed').src = newprops.iconColor === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
+  }
+  if (newprops.fullScreen === true || newprops.fullScreen === 'true') {
+    document.getElementById('iframe-parent-container')?.classList.add('full-screen-interfaceEmbed')
+  }
+  if (newprops.fullScreen === false || newprops.fullScreen === 'false') {
+    document.getElementById('iframe-parent-container')?.classList.remove('full-screen-interfaceEmbed')
+  }
+  if ('hideIcon' in newprops && document.getElementById('interfaceEmbed')) {
+    document.getElementById('interfaceEmbed').style.display = newprops.hideIcon === true || newprops.hideIcon === 'true' ? 'none' : 'unset'
+  }
+  if ('hideCloseButton' in newprops && document.getElementById('close-button-interfaceEmbed')) {
+    document.getElementById('close-button-interfaceEmbed').style.display =
+      newprops.hideCloseButton === true || newprops.hideCloseButton === 'true' ? 'none' : 'unset'
+  }
 }
 function createProps() {
-    if (interfaceScript) {
-        // Create an object to store the extracted attributes
-        const attributes = ['interfaceId', 'embedToken', 'threadId', 'bridgeName', 'variables', 'onOpen', 'onClose', 'iconColor', 'className', 'style', 'environment', 'fullScreen', 'hideCloseButton', 'hideIcon', 'parentId'];
-        attributes.forEach(attr => {
-            if (interfaceScript.hasAttribute(attr)) {
-                props[attr] = interfaceScript.getAttribute(attr);
-            }
-        });
-        // updateProps(props);
-    } else {
-        console.log("Script tag not found");
-    }
+  if (interfaceScript) {
+    // Create an object to store the extracted attributes
+    const attributes = [
+      'interfaceId',
+      'embedToken',
+      'threadId',
+      'bridgeName',
+      'variables',
+      'onOpen',
+      'onClose',
+      'iconColor',
+      'className',
+      'style',
+      'environment',
+      'fullScreen',
+      'hideCloseButton',
+      'hideIcon',
+      'parentId',
+      'config'
+    ]
+    attributes.forEach((attr) => {
+      if (interfaceScript.hasAttribute(attr)) {
+        let attributeValue = interfaceScript.getAttribute(attr)
+        if (attr === 'config' && attributeValue) attributeValue = JSON.parse(attributeValue)
+        props[attr] = attributeValue
+      }
+    })
+    // updateProps(props);
+  } else {
+    console.log('Script tag not found')
+  }
 }
-createProps();
+createProps()
 
 function handleScriptRemoval(mutationsList, observer) {
-    for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-            for (const addedNode of mutation.addedNodes) {
-                if (addedNode.id === 'chatbot-main-script') {
-                    interfaceScript = document.getElementById('chatbot-main-script');
-                    createProps();
-                }
-            }
-            for (const removedNode of mutation.removedNodes) {
-                if (removedNode.id === 'chatbot-main-script') {
-                    // Perform your cleanup here
-                    console.log('Script tag removed, performing cleanup...');
-                    const elementToRemove = document.getElementById('iframe-parent-container');
-                    const interfaceEmbed = document.getElementById('interfaceEmbed');
-                    const styleEmbed = document.getElementById('chatbotEmbed-style');
-                    if (interfaceEmbed) {
-                        interfaceEmbed.remove();
-                    }
-                    if (elementToRemove) {
-                        elementToRemove.remove();
-                    }
-                    if (styleEmbed) {
-                        styleEmbed.remove();
-                    }
-                    // Stop observing after the script tag is removed
-                    observer.disconnect();
-                }
-            }
+  for (const mutation of mutationsList) {
+    if (mutation.type === 'childList') {
+      for (const addedNode of mutation.addedNodes) {
+        if (addedNode.id === 'chatbot-main-script') {
+          interfaceScript = document.getElementById('chatbot-main-script')
+          createProps()
         }
+      }
+      for (const removedNode of mutation.removedNodes) {
+        if (removedNode.id === 'chatbot-main-script') {
+          // Perform your cleanup here
+          console.log('Script tag removed, performing cleanup...')
+          const elementToRemove = document.getElementById('iframe-parent-container')
+          const interfaceEmbed = document.getElementById('interfaceEmbed')
+          const styleEmbed = document.getElementById('chatbotEmbed-style')
+          if (interfaceEmbed) {
+            interfaceEmbed.remove()
+          }
+          if (elementToRemove) {
+            elementToRemove.remove()
+          }
+          if (styleEmbed) {
+            styleEmbed.remove()
+          }
+          // Stop observing after the script tag is removed
+          observer.disconnect()
+        }
+      }
     }
+  }
 }
 
-const observer = new MutationObserver(handleScriptRemoval);
-observer.observe(document.head, { childList: true });
-
-function makeImageUrl(imageId) {
-    return `https://imagedelivery.net/Vv7GgOGQbSyClWJqhyP0VQ/${imageId}/public`
-}
+const observer = new MutationObserver(handleScriptRemoval)
+observer.observe(document.head, { childList: true })
 
 closeChatbot = function () {
-    const iframeContainer = document.getElementById('iframe-parent-container');
+  const iframeContainer = document.getElementById('iframe-parent-container')
 
-    if (iframeContainer?.style?.display === 'block') {
-        // Apply inline animation for fade out
-        iframeContainer.style.transition = 'opacity 0.2s ease-in-out';
-        iframeContainer.style.opacity = 0;
+  if (iframeContainer?.style?.display === 'block') {
+    // Apply inline animation for fade out
+    iframeContainer.style.transition = 'opacity 0.2s ease-in-out'
+    iframeContainer.style.opacity = 0
 
-        // Wait for the animation to finish before hiding the element
-        setTimeout(() => {
-            iframeContainer.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            if (document.getElementById('interfaceEmbed')) {
-                document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset';
-            }
-            window.parent?.postMessage({ type: 'close', data: {} }, '*');
-            iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*');
-        }, 200); // This should match the duration of the transition
+    // Wait for the animation to finish before hiding the element
+    setTimeout(() => {
+      iframeContainer.style.display = 'none'
+      document.body.style.overflow = 'auto'
+      if (document.getElementById('interfaceEmbed')) {
+        document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset'
+      }
+      window.parent?.postMessage({ type: 'close', data: {} }, '*')
+      iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*')
+    }, 200) // This should match the duration of the transition
 
-        return;
-    }
+    return
+  }
 }
 
 // Set a timeout to automatically remove the event listener after 60 seconds
 const timeoutId = setTimeout(() => {
-    window.removeEventListener('message', SendTempDataToChatbot);
-    console.log("Event listener removed after 60 seconds");
-}, 60000);
+  window.removeEventListener('message', SendTempDataToChatbot)
+  console.log('Event listener removed after 60 seconds')
+}, 60000)
 
 function SendTempDataToChatbot(event) {
-    const { type } = event.data;
-    if (type === 'interfaceLoaded') {
-        if (tempDataToSend) {
-            console.log('data sent')
-            document.getElementById('iframe-component-interfaceEmbed').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
-            tempDataToSend = null;
-        }
-        window.removeEventListener('message', SendTempDataToChatbot);
-        clearTimeout(timeoutId);
+  const { type } = event.data
+  if (type === 'interfaceLoaded') {
+    if (tempDataToSend) {
+      const dataToSend = JSON.parse(JSON.stringify(tempDataToSend)) // Strip non-cloneable items
+      document.getElementById('iframe-component-interfaceEmbed').contentWindow.postMessage({ type: messageType, data: dataToSend }, '*')
+      tempDataToSend = null
     }
+    window.removeEventListener('message', SendTempDataToChatbot)
+    clearTimeout(timeoutId)
+  }
 }
 
-let parentContainer = null;
+let parentContainer = null
 let config = {
-    "type": "popup",
-    "height": "100",
-    "heightUnit": "%",
-    "width": "50",
-    "widthUnit": "%",
-    "buttonName": ""
+  type: 'popup',
+  height: '100',
+  heightUnit: '%',
+  width: '50',
+  widthUnit: '%',
+  buttonName: ''
 }
 let title = 'Via socket'
 let buttonName = 'Chatbot'
 let className = 'popup'
 
 loadChatbotEmbed = async function () {
-    const embedToken = document.getElementById('chatbot-main-script')?.getAttribute('embedToken');
-    let modifiedUrl = `${urlToViasocket}?`
-    let requestOptions = {};
+  const embedToken = document.getElementById('chatbot-main-script')?.getAttribute('embedToken')
+  let modifiedUrl = `${urlToViasocket}?`
+  let requestOptions = {}
 
-    if (embedToken) {
-        requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: embedToken
-            }
-        }
-    } else {
-        const interface_id = document.getElementById('chatbot-main-script')?.getAttribute('interface_id');
-        if (interface_id) {
-            requestOptions = {
-                method: 'POST',
-                body: JSON.stringify({ isAnonymousUser: true, interface_id: interface_id }),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }
-        }
+  if (embedToken) {
+    requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: embedToken
+      }
     }
+  } else {
+    const interface_id = document.getElementById('chatbot-main-script')?.getAttribute('interface_id')
+    if (interface_id) {
+      requestOptions = {
+        method: 'POST',
+        body: JSON.stringify({ isAnonymousUser: true, interface_id: interface_id }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    }
+  }
 
-    fetch(loginurl, requestOptions)
-        .then(async (response) => {
-            const data = await response.json();
-            return data
-        })
-        .then((data) => {
-            if (!document.getElementById('iframe-parent-container')) return;
-            config = data?.data?.config
-            const encodedData = encodeURIComponent(`${JSON.stringify(data.data)}`);
-            modifiedUrl = modifiedUrl.concat(`interfaceDetails=${encodedData}`);
-            const parts = document.getElementById('iframe-component-interfaceEmbed')?.src?.split('?')
-            const baseUrl = parts?.[0]
-            if (baseUrl !== urlToViasocket && document.getElementById('iframe-component-interfaceEmbed')) {
-                document.getElementById('iframe-component-interfaceEmbed').src = modifiedUrl
-            }
-            const interfaceEmbedElement = document.getElementById('interfaceEmbed');
-            if (config) {
-                if (config.title) {
-                    title = config.title
-                }
-                if (config.buttonName) {
-                    buttonName = config.buttonName;
-                    textElement.innerText = buttonName;
-                    // Add a class to show the background color when the button text is shown
-                    interfaceEmbedElement.classList.add('show-bg-color');
-                    imgElement.style.visibility = 'hidden';// Hide the icon when button text is shown
-                } else {
-                    textElement.innerText = '';
-                    interfaceEmbedElement?.classList.remove('show-bg-color');
-                    imgElement.style.visibility = 'visible';// Show the icon when button text is empty
-                }
-                if(config.iconUrl){
-                    imgElement.src = config.iconUrl;
-                    interfaceEmbedElement?.classList.remove('show-bg-color');
-                    textElement.innerText = '';
-                    imgElement.style.visibility = 'visible';
-                }
-                if (config.type) {
-                    document.getElementById('iframe-parent-container')?.classList.remove(`${className}-parent-container`)
-                    interfaceEmbedElement?.classList.remove(`${className}-interfaceEmbed`)
-                    className = config.type
-                }
-            }
-            document.getElementById('iframe-parent-container')?.classList.add(`${className}-parent-container`)
-            interfaceEmbedElement?.classList.add(`${className}-interfaceEmbed`)
+  fetch(loginurl, requestOptions)
+    .then(async (response) => {
+      const data = await response.json()
+      return data
+    })
+    .then((data) => {
+      if (!document.getElementById('iframe-parent-container')) return
+      config = data?.data?.config
+      const encodedData = encodeURIComponent(`${JSON.stringify(data.data)}`)
+      modifiedUrl = modifiedUrl.concat(`interfaceDetails=${encodedData}`)
+      const parts = document.getElementById('iframe-component-interfaceEmbed')?.src?.split('?')
+      const baseUrl = parts?.[0]
+      if (baseUrl !== urlToViasocket && document.getElementById('iframe-component-interfaceEmbed')) {
+        document.getElementById('iframe-component-interfaceEmbed').src = modifiedUrl
+      }
+      if (config) {
+        applyConfig({ ...config, ...props?.config })
+      }
+    })
+    .catch((error) => {
+      console.log('Fetch error:', error)
+    })
+}
+function applyConfig(config) {
+  const interfaceEmbedElement = document.getElementById('interfaceEmbed')
+  const iframeParentContainer = document.getElementById('iframe-parent-container')
+  if (!iframeParentContainer) return
+  if (config) {
+    if (config.title) {
+      title = config.title
+    }
+    if (config.buttonName) {
+      buttonName = config.buttonName
+      textElement.innerText = buttonName
+      interfaceEmbedElement.classList.add('show-bg-color')
+      if (imgElement) imgElement.style.visibility = 'hidden'
+    } else {
+      textElement.innerText = ''
+      interfaceEmbedElement?.classList.remove('show-bg-color')
+      if (imgElement) imgElement.style.visibility = 'visible'
+    }
+    if (config.iconUrl) {
+      if (imgElement) imgElement.src = config.iconUrl
+      interfaceEmbedElement?.classList.remove('show-bg-color')
+      textElement.innerText = ''
+      if (imgElement) imgElement.style.visibility = 'visible'
+    }
+    if (config.type && iframeParentContainer) {
+      // Remove existing class that matches the pattern
+      iframeParentContainer?.classList.forEach((cls) => {
+        if (cls.endsWith('-parent-container')) {
+          iframeParentContainer.classList.remove(cls)
+        }
+      })
+      interfaceEmbedElement?.classList.forEach((cls) => {
+        if (cls.endsWith('-interfaceEmbed')) {
+          interfaceEmbedElement.classList.remove(cls)
+        }
+      })
 
-            if (className === 'all_available_space') {
-                document.getElementById('iframe-parent-container').style.height = '100%'
-                document.getElementById('iframe-parent-container').style.width = '100%'
-            } else {
-                document.getElementById('iframe-parent-container').style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh'
-                document.getElementById('iframe-parent-container').style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw'
-            }
-        })
-        .catch((error) => {
-            console.log('Fetch error:', error)
-        })
+      // Add new class
+      iframeParentContainer?.classList.add(`${config.type}-parent-container`)
+      interfaceEmbedElement?.classList.add(`${config.type}-interfaceEmbed`)
+      className = config.type
+    }
+  }
+
+  if (className === 'all_available_space') {
+    iframeParentContainer.style.height = '100%'
+    iframeParentContainer.style.width = '100%'
+    iframeParentContainer.style.display = 'block'
+  } else {
+    iframeParentContainer.style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh'
+    iframeParentContainer.style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw'
+  }
 }
 
 const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = bodyLoaded) {
-    if (bodyLoadedHai) return;
-    window.addEventListener('message', SendTempDataToChatbot);
-    if (!parentContainer) {
-        parentContainer = document.createElement('div');
-        parentContainer.id = 'iframe-parent-container';
-        parentContainer.className = 'popup-parent-container';
-        parentContainer.style.display = 'none';
-        parentContainer.innerHTML = `
+  if (bodyLoadedHai) return
+  window.addEventListener('message', SendTempDataToChatbot)
+  if (!parentContainer) {
+    parentContainer = document.createElement('div')
+    parentContainer.id = 'iframe-parent-container'
+    parentContainer.className = 'popup-parent-container'
+    parentContainer.style.display = 'none'
+    parentContainer.innerHTML = `
        ${closebutton}
         <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
-      `;
-    }
-    changeContainer(parentId);
+      `
+  }
+  changeContainer(parentId)
 
-    bodyLoaded = true;
-    updateProps({ ...props });
-    loadChatbotEmbed();
-};
-
-const changeContainer = function (parentId) {
-    if (parentId) {
-        const container = document.getElementById(parentId);
-        if (container) {
-            container.style.position = 'relative';
-            container.appendChild(parentContainer);
-        }
-    } else if (document.getElementById('interface-chatbot')) {
-        document.getElementById('interface-chatbot').appendChild(parentContainer);
-    } else {
-        document.body.appendChild(parentContainer);
-    }
+  bodyLoaded = true
+  updateProps({ ...props })
+  loadChatbotEmbed()
 }
 
-document.addEventListener("DOMContentLoaded", loadContent);
+const changeContainer = function (parentId) {
+  if (parentId && document.getElementById(parentId)) {
+    const container = document.getElementById(parentId)
+    if (container) {
+      container.style.position = 'relative'
+      container.appendChild(parentContainer)
+    }
+  } else if (document.getElementById('interface-chatbot')) {
+    document.getElementById('interface-chatbot').appendChild(parentContainer)
+  } else {
+    document.body.appendChild(parentContainer)
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadContent)
 if (document?.body) loadContent()
 
-const iframeComponent = document.getElementById('iframe-component-interfaceEmbed');
-if (iframeComponent) {
-    iframeComponent.onload = function () {
-        iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
+const iframeComponent = document.getElementById('iframe-component-interfaceEmbed')
+if (iframeComponent?.contentWindow) {
+  iframeComponent.onload = function () {
+    try {
+      const dataToSend = JSON.parse(JSON.stringify(tempDataToSend)) // Strip functions or DOM nodes
+      iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+    } catch (error) {
+      console.error('Error serializing data:', error)
     }
+  }
 }
 
 SendDataToChatbot = function (dataToSend) {
-    if ('parentId' in dataToSend) {
-        const previousParentId = props['parentId'];
-        if (previousParentId !== dataToSend.parentId) {
-            if (previousParentId) {
-                const existingParent = document.getElementById(previousParentId);
-                if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
-                    existingParent.removeChild(parentContainer);
-                }
-            } else if (parentContainer && document.body.contains(parentContainer)) {
-                document.body.removeChild(parentContainer);
-            }
-            updateProps({ parentId: dataToSend.parentId });
-            // loadContent(dataToSend.parentId, false);
-            changeContainer(dataToSend?.parentId || "");
+  if ('parentId' in dataToSend) {
+    const previousParentId = props['parentId']
+    if (previousParentId !== dataToSend.parentId) {
+      if (previousParentId) {
+        const existingParent = document.getElementById(previousParentId)
+        if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
+          existingParent.removeChild(parentContainer)
         }
+      } else if (parentContainer && document.body.contains(parentContainer)) {
+        document.body.removeChild(parentContainer)
+      }
+      updateProps({ parentId: dataToSend.parentId })
+      // loadContent(dataToSend.parentId, false);
+      changeContainer(dataToSend?.parentId || '')
     }
-    if ('hideCloseButton' in dataToSend) {
-        updateProps({ hideCloseButton: dataToSend.hideCloseButton || false })
-    }
-    if ('hideIcon' in dataToSend) {
-        updateProps({ hideIcon: dataToSend.hideIcon || false })
-    }
-    if (dataToSend.iconColor) {
-        updateProps({ iconColor: dataToSend.iconColor || 'dark' })
-    }
-    if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
-        updateProps({ fullScreen: dataToSend.fullScreen });
-    }
-    if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
-        updateProps({ fullScreen: dataToSend.fullScreen });
-    }
-    if (dataToSend && iframeComponent) {
-        tempDataToSend = dataToSend;
-        iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
-    }
-    if (dataToSend.askAi) {
-        iframeComponent.contentWindow?.postMessage({ type: "askAi", data: dataToSend || {} }, '*')
-    }
+  }
+  if ('config' in dataToSend) {
+    const newconfig = { ...config, ...dataToSend?.config }
+    applyConfig(newconfig)
+    updateProps({ config: newconfig })
+  }
+  if ('hideCloseButton' in dataToSend) {
+    updateProps({ hideCloseButton: dataToSend.hideCloseButton || false })
+  }
+  if ('hideIcon' in dataToSend) {
+    updateProps({ hideIcon: dataToSend.hideIcon || false })
+  }
+  if (dataToSend.iconColor) {
+    updateProps({ iconColor: dataToSend.iconColor || 'dark' })
+  }
+  if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
+    updateProps({ fullScreen: dataToSend.fullScreen })
+  }
+  if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
+    updateProps({ fullScreen: dataToSend.fullScreen })
+  }
+  if (dataToSend && iframeComponent?.contentWindow) {
+    tempDataToSend = dataToSend
+    iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+  }
+  if (dataToSend.askAi && iframeComponent?.contentWindow) {
+    iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: dataToSend || {} }, '*')
+  }
 }
 
 openChatbot = function () {
-    window.parent?.postMessage({ type: 'open', data: {} }, '*');
-    iframeComponent.contentWindow?.postMessage({ type: 'open', data: {} }, '*');
+  window.parent?.postMessage({ type: 'open', data: {} }, '*')
+  iframeComponent.contentWindow?.postMessage({ type: 'open', data: {} }, '*')
 
-    if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
-        document.getElementById('interfaceEmbed').style.display = 'none';
-        const iframeContainer = document.getElementById('iframe-parent-container');
-        iframeContainer.style.display = 'block';
+  if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {
+    document.getElementById('interfaceEmbed').style.display = 'none'
+    const iframeContainer = document.getElementById('iframe-parent-container')
+    iframeContainer.style.display = 'block'
 
-        // Reset opacity to 0 before applying animation (in case the element was previously shown)
-        iframeContainer.style.opacity = 0;
-        // Apply inline animation
-        iframeContainer.style.transition = 'opacity 0.3s ease-in-out';
-        requestAnimationFrame(() => {
-            iframeContainer.style.opacity = 1;
-        });
+    // Reset opacity to 0 before applying animation (in case the element was previously shown)
+    iframeContainer.style.opacity = 0
+    // Apply inline animation
+    iframeContainer.style.transition = 'opacity 0.3s ease-in-out'
+    requestAnimationFrame(() => {
+      iframeContainer.style.opacity = 1
+    })
 
-        document.body.style.overflow = 'hidden';
-    }
+    document.body.style.overflow = 'hidden'
+  }
 }
 // loadChatbotEmbed()
 
 reloadChats = function () {
-    iframeComponent.contentWindow?.postMessage({ type: 'refresh', reload: true }, '*')
+  iframeComponent.contentWindow?.postMessage({ type: 'refresh', reload: true }, '*')
 }
 
 askAi = function (data) {
     iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data || "" }, '*')
 }
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
-    window.openChatbot()
+  window.openChatbot()
 })
