@@ -3,8 +3,8 @@ const urlToViasocket = `https://dev-chatbot.viasocket.com/i`;
 const styleUrl = 'https://chatbot-embed.viasocket.com/style-dev.css';
 const loginurl = 'https://routes.msg91.com/api/proxy/1258584/29ipuks30/chatbot/loginuser';
 
-let tempDataToSend = null
-let bodyLoaded = false
+let tempDataToSend = null;
+let bodyLoaded = false;
 const messageType = 'interfaceData'
 let props = {}
 function makeImageUrl(imageId) {
@@ -17,26 +17,26 @@ let interfaceScript = document.getElementById('chatbot-main-script')
 const chatBotIcon = document.createElement('div')
 chatBotIcon.id = 'interfaceEmbed'
 
-const imgElement = document.createElement('img')
-imgElement.id = 'popup-interfaceEmbed'
+const imgElement = document.createElement('img');
+imgElement.id = 'popup-interfaceEmbed';
 imgElement.className = 'chatbot-icon-interfaceEmbed'
-imgElement.alt = 'Ask Ai'
+imgElement.alt = 'Ask Ai';
 imgElement.src = AI_BLACK_ICON
-imgElement.style.visibility = 'hidden'
-chatBotIcon.appendChild(imgElement)
+imgElement.style.visibility = 'hidden';
+chatBotIcon.appendChild(imgElement);
 // Create a span element to hold the button text
-const textElement = document.createElement('span')
-textElement.id = 'popup-interfaceEmbed-text'
-chatBotIcon.appendChild(textElement)
+const textElement = document.createElement('span');
+textElement.id = 'popup-interfaceEmbed-text';
+chatBotIcon.appendChild(textElement);
 
-document.body.appendChild(chatBotIcon)
+document.body.appendChild(chatBotIcon);
 
-var link = document.createElement('link')
+var link = document.createElement('link');
 link.id = 'chatbotEmbed-style'
-link.rel = 'stylesheet'
-link.type = 'text/css'
-link.href = styleUrl
-document.head.appendChild(link)
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = styleUrl;
+document.head.appendChild(link);
 
 const closebutton = ` <button id='close-button-interfaceEmbed' onclick="closeChatbot()">
           <svg width="35px" height="35px" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
@@ -55,7 +55,7 @@ const closebutton = ` <button id='close-button-interfaceEmbed' onclick="closeCha
               </g>
             </g>
           </svg>
-        </button>`
+        </button>`;
 
 const updateProps = (newprops = {}) => {
   props = { ...props, ...newprops }
@@ -63,20 +63,15 @@ const updateProps = (newprops = {}) => {
 }
 const setPropValues = (newprops) => {
   if (newprops.iconColor) {
-    document.getElementById('popup-interfaceEmbed').src = newprops.iconColor === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
-  }
-  if (newprops.fullScreen === true || newprops.fullScreen === 'true') {
+    document.getElementById("popup-interfaceEmbed").src = newprops.iconColor === 'dark' ? AI_WHITE_ICON : AI_BLACK_ICON
+  } if (newprops.fullScreen === true || newprops.fullScreen === 'true') {
     document.getElementById('iframe-parent-container')?.classList.add('full-screen-interfaceEmbed')
-  }
-  if (newprops.fullScreen === false || newprops.fullScreen === 'false') {
+  } if (newprops.fullScreen === false || newprops.fullScreen === 'false') {
     document.getElementById('iframe-parent-container')?.classList.remove('full-screen-interfaceEmbed')
-  }
-  if ('hideIcon' in newprops && document.getElementById('interfaceEmbed')) {
-    document.getElementById('interfaceEmbed').style.display = newprops.hideIcon === true || newprops.hideIcon === 'true' ? 'none' : 'unset'
-  }
-  if ('hideCloseButton' in newprops && document.getElementById('close-button-interfaceEmbed')) {
-    document.getElementById('close-button-interfaceEmbed').style.display =
-      newprops.hideCloseButton === true || newprops.hideCloseButton === 'true' ? 'none' : 'unset'
+  } if ('hideIcon' in newprops && document.getElementById('interfaceEmbed')) {
+    document.getElementById('interfaceEmbed').style.display = (newprops.hideIcon === true || newprops.hideIcon === 'true') ? 'none' : 'unset';
+  } if ('hideCloseButton' in newprops && document.getElementById('close-button-interfaceEmbed')) {
+    document.getElementById('close-button-interfaceEmbed').style.display = (newprops.hideCloseButton === true || newprops.hideCloseButton === 'true') ? 'none' : 'unset';
   }
 }
 function createProps() {
@@ -103,7 +98,12 @@ function createProps() {
     attributes.forEach((attr) => {
       if (interfaceScript.hasAttribute(attr)) {
         let attributeValue = interfaceScript.getAttribute(attr)
-        if (attr === 'config' && attributeValue) attributeValue = JSON.parse(attributeValue)
+        if (attr === 'config' && attributeValue) {
+          try { attributeValue = JSON.parse(attributeValue) }
+          catch (e) {
+            console.log(e)
+          }
+        }
         props[attr] = attributeValue
       }
     })
@@ -358,27 +358,6 @@ if (iframeComponent?.contentWindow) {
 }
 
 SendDataToChatbot = function (dataToSend) {
-  if ('parentId' in dataToSend) {
-    const previousParentId = props['parentId']
-    if (previousParentId !== dataToSend.parentId) {
-      if (previousParentId) {
-        const existingParent = document.getElementById(previousParentId)
-        if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
-          existingParent.removeChild(parentContainer)
-        }
-      } else if (parentContainer && document.body.contains(parentContainer)) {
-        document.body.removeChild(parentContainer)
-      }
-      updateProps({ parentId: dataToSend.parentId })
-      // loadContent(dataToSend.parentId, false);
-      changeContainer(dataToSend?.parentId || '')
-    }
-  }
-  if ('config' in dataToSend) {
-    const newconfig = { ...config, ...dataToSend?.config }
-    applyConfig(newconfig)
-    updateProps({ config: newconfig })
-  }
   if ('hideCloseButton' in dataToSend) {
     updateProps({ hideCloseButton: dataToSend.hideCloseButton || false })
   }
@@ -400,6 +379,27 @@ SendDataToChatbot = function (dataToSend) {
   }
   if (dataToSend.askAi && iframeComponent?.contentWindow) {
     iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: dataToSend || {} }, '*')
+  }
+  if ('config' in dataToSend) {
+    const newconfig = { ...config, ...dataToSend?.config }
+    applyConfig(newconfig)
+    updateProps({ config: newconfig })
+  }
+  if ('parentId' in dataToSend) {
+    const previousParentId = props['parentId']
+    if (previousParentId !== dataToSend.parentId) {
+      if (previousParentId) {
+        const existingParent = document.getElementById(previousParentId)
+        if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
+          existingParent.removeChild(parentContainer)
+        }
+      } else if (parentContainer && document.body.contains(parentContainer)) {
+        document.body.removeChild(parentContainer)
+      }
+      updateProps({ parentId: dataToSend.parentId })
+      // loadContent(dataToSend.parentId, false);
+      changeContainer(dataToSend?.parentId || '')
+    }
   }
 }
 
@@ -430,7 +430,7 @@ reloadChats = function () {
 }
 
 askAi = function (data) {
-    iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data || "" }, '*')
+  iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: data || "" }, '*')
 }
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
   window.openChatbot()
