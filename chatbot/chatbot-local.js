@@ -357,7 +357,79 @@ if (iframeComponent?.contentWindow) {
   }
 }
 
+// SendDataToChatbot = function (dataToSend) {
+//   if ('hideCloseButton' in dataToSend) {
+//     updateProps({ hideCloseButton: dataToSend.hideCloseButton || false })
+//   }
+//   if ('hideIcon' in dataToSend) {
+//     updateProps({ hideIcon: dataToSend.hideIcon || false })
+//   }
+//   if (dataToSend.iconColor) {
+//     updateProps({ iconColor: dataToSend.iconColor || 'dark' })
+//   }
+//   if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
+//     updateProps({ fullScreen: dataToSend.fullScreen })
+//   }
+//   if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
+//     updateProps({ fullScreen: dataToSend.fullScreen })
+//   }
+//   if (dataToSend && iframeComponent?.contentWindow) {
+//     tempDataToSend = dataToSend
+//     iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+//   }
+//   if (dataToSend.askAi && iframeComponent?.contentWindow) {
+//     iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: dataToSend || {} }, '*')
+//   }
+//   if ('config' in dataToSend) {
+//     const newconfig = { ...config, ...dataToSend?.config }
+//     applyConfig(newconfig)
+//     updateProps({ config: newconfig })
+//   }
+//   if ('parentId' in dataToSend) {
+//     const previousParentId = props['parentId']
+//     if (previousParentId !== dataToSend.parentId) {
+//       if (previousParentId) {
+//         const existingParent = document.getElementById(previousParentId)
+//         if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
+//           existingParent.removeChild(parentContainer)
+//         }
+//       } else if (parentContainer && document.body.contains(parentContainer)) {
+//         document.body.removeChild(parentContainer)
+//       }
+//       updateProps({ parentId: dataToSend.parentId })
+//       // loadContent(dataToSend.parentId, false);
+//       changeContainer(dataToSend?.parentId || '')
+//     }
+//   }
+// }
+
 SendDataToChatbot = function (dataToSend) {
+  if ('parentId' in dataToSend) {
+    var previousParentId = props['parentId']
+    var existingParent = document.getElementById(previousParentId)
+    if (existingParent?.contains(parentContainer)) {
+      if (previousParentId !== dataToSend.parentId) {
+        if (previousParentId) {
+
+          if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
+            existingParent.removeChild(parentContainer)
+          }
+        } else if (parentContainer && document.body.contains(parentContainer)) {
+          document.body.removeChild(parentContainer)
+        }
+        updateProps({ parentId: dataToSend.parentId })
+        // loadContent(dataToSend.parentId, false);
+        changeContainer(dataToSend?.parentId || '')
+      }
+    } else {
+      updateProps({ parentId: dataToSend.parentId })
+      changeContainer(dataToSend?.parentId || '')
+    }
+  }
+  sendOtherData(dataToSend)
+}
+
+const sendOtherData = (dataToSend) => {
   if ('hideCloseButton' in dataToSend) {
     updateProps({ hideCloseButton: dataToSend.hideCloseButton || false })
   }
@@ -381,25 +453,9 @@ SendDataToChatbot = function (dataToSend) {
     iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: dataToSend || {} }, '*')
   }
   if ('config' in dataToSend) {
-    const newconfig = { ...config, ...dataToSend?.config }
+    var newconfig = { ...config, ...dataToSend?.config }
     applyConfig(newconfig)
     updateProps({ config: newconfig })
-  }
-  if ('parentId' in dataToSend) {
-    const previousParentId = props['parentId']
-    if (previousParentId !== dataToSend.parentId) {
-      if (previousParentId) {
-        const existingParent = document.getElementById(previousParentId)
-        if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
-          existingParent.removeChild(parentContainer)
-        }
-      } else if (parentContainer && document.body.contains(parentContainer)) {
-        document.body.removeChild(parentContainer)
-      }
-      updateProps({ parentId: dataToSend.parentId })
-      // loadContent(dataToSend.parentId, false);
-      changeContainer(dataToSend?.parentId || '')
-    }
   }
 }
 
