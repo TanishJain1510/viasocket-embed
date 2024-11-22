@@ -183,8 +183,8 @@ function SendTempDataToChatbot(event) {
   const { type } = event.data
   if (type === 'interfaceLoaded') {
     if (tempDataToSend) {
-      const dataToSend = JSON.parse(JSON.stringify(tempDataToSend)) // Strip non-cloneable items
-      document.getElementById('iframe-component-interfaceEmbed').contentWindow.postMessage({ type: messageType, data: dataToSend }, '*')
+      // var dataToSend = JSON.parse(JSON.stringify(tempDataToSend)) // Strip non-cloneable items
+      document.getElementById('iframe-component-interfaceEmbed').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
       tempDataToSend = null
     }
     window.removeEventListener('message', SendTempDataToChatbot)
@@ -247,7 +247,8 @@ loadChatbotEmbed = async function () {
         document.getElementById('iframe-component-interfaceEmbed').src = modifiedUrl
       }
       if (config) {
-        applyConfig({ ...config, ...props?.config })
+        // applyConfig({ ...config, ...props?.config })
+        applyConfig({ ...config })
       }
     })
     .catch((error) => {
@@ -329,6 +330,7 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
 }
 
 const changeContainer = function (parentId) {
+  window.addEventListener('message', SendTempDataToChatbot)
   if (parentId && document.getElementById(parentId)) {
     const container = document.getElementById(parentId)
     if (container) {
@@ -349,8 +351,8 @@ const iframeComponent = document.getElementById('iframe-component-interfaceEmbed
 if (iframeComponent?.contentWindow) {
   iframeComponent.onload = function () {
     try {
-      const dataToSend = JSON.parse(JSON.stringify(tempDataToSend)) // Strip functions or DOM nodes
-      iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
+      // const dataToSend = JSON.parse(JSON.stringify(tempDataToSend)) // Strip functions or DOM nodes
+      iframeComponent.contentWindow?.postMessage({ type: messageType, data: tempDataToSend }, '*')
     } catch (error) {
       console.error('Error serializing data:', error)
     }
@@ -399,6 +401,7 @@ if (iframeComponent?.contentWindow) {
 //       updateProps({ parentId: dataToSend.parentId })
 //       // loadContent(dataToSend.parentId, false);
 //       changeContainer(dataToSend?.parentId || '')
+//       tempDataToSend = dataToSend
 //     }
 //   }
 // }
@@ -418,10 +421,11 @@ SendDataToChatbot = function (dataToSend) {
           document.body.removeChild(parentContainer)
         }
         updateProps({ parentId: dataToSend.parentId })
-        // loadContent(dataToSend.parentId, false);
+        tempDataToSend = dataToSend
         changeContainer(dataToSend?.parentId || '')
       }
     } else {
+      tempDataToSend = dataToSend
       updateProps({ parentId: dataToSend.parentId })
       changeContainer(dataToSend?.parentId || '')
     }
