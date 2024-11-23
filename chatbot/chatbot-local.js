@@ -105,6 +105,7 @@ function createProps() {
           }
         }
         props[attr] = attributeValue
+        tempDataToSend = { ...tempDataToSend, [attr]: attributeValue }
       }
     })
     // updateProps(props);
@@ -150,6 +151,30 @@ function handleScriptRemoval(mutationsList, observer) {
 const observer = new MutationObserver(handleScriptRemoval)
 observer.observe(document.head, { childList: true })
 
+// Iframe pareant resizable code
+const iframeObserver = new ResizeObserver((entries) => {
+  const iframeParentContainer = document.getElementById('iframe-parent-container')
+  for (let entry of entries) {
+    const { width, height } = entry.contentRect;
+    // Perform necessary actions based on new dimensions
+    if (width < 600) {
+      if (iframeParentContainer) {
+        iframeParentContainer.style.height = '100%'
+        iframeParentContainer.style.width = '100%'
+      }
+      // Handle small window size
+    } else {
+      if (iframeParentContainer) {
+        applyConfig(props?.config)
+      }
+      // Handle large window size
+    }
+  }
+});
+
+// Observe the <html> or <body> element of the iframe
+iframeObserver.observe(document.documentElement);
+
 closeChatbot = function () {
   const iframeContainer = document.getElementById('iframe-parent-container')
 
@@ -163,7 +188,7 @@ closeChatbot = function () {
       iframeContainer.style.display = 'none'
       document.body.style.overflow = 'auto'
       if (document.getElementById('interfaceEmbed')) {
-        document.getElementById('interfaceEmbed').style.display = props?.hideIcon ? 'none' : 'unset'
+        document.getElementById('interfaceEmbed').style.display = (props.hideIcon === true || props.hideIcon === 'true') ? 'none' : 'unset';
       }
       window.parent?.postMessage({ type: 'close', data: {} }, '*')
       iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*')
@@ -248,6 +273,7 @@ loadChatbotEmbed = async function () {
       }
       if (config) {
         // applyConfig({ ...config, ...props?.config })
+        props['config'] = { ...props?.config, ...config }
         applyConfig({ ...config })
       }
     })
