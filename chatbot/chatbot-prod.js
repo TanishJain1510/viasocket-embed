@@ -190,7 +190,7 @@ closeChatbot = function () {
       if (document.getElementById('interfaceEmbed')) {
         document.getElementById('interfaceEmbed').style.display = (props.hideIcon === true || props.hideIcon === 'true') ? 'none' : 'unset';
       }
-      window.parent?.postMessage({ type: 'close', data: {} }, '*')
+      window.parent?.postMessage({ type: 'close', data: {} }, '*');
       if (window.ReactNativeWebView) window?.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'close', data: {} }));
       iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*')
     }, 200) // This should match the duration of the transition
@@ -203,15 +203,16 @@ closeChatbot = function () {
 const timeoutId = setTimeout(() => {
   window.removeEventListener('message', SendTempDataToChatbot)
   console.log('Event listener removed after 60 seconds')
-}, 60000)
+}, 60000);
 
 function SendTempDataToChatbot(event) {
   const { type } = event.data
   if (type === 'interfaceLoaded') {
     if (tempDataToSend) {
-      // var dataToSend = JSON.parse(JSON.stringify(tempDataToSend)) // Strip non-cloneable items
-      document.getElementById('iframe-component-interfaceEmbed').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
-      tempDataToSend = null
+      if (document.getElementById('iframe-component-interfaceEmbed').contentWindow) {
+        document.getElementById('iframe-component-interfaceEmbed').contentWindow.postMessage({ type: messageType, data: tempDataToSend }, '*')
+        tempDataToSend = null
+      }
     }
     window.removeEventListener('message', SendTempDataToChatbot)
     clearTimeout(timeoutId)
@@ -386,61 +387,13 @@ if (iframeComponent?.contentWindow) {
   }
 }
 
-// SendDataToChatbot = function (dataToSend) {
-//   if ('hideCloseButton' in dataToSend) {
-//     updateProps({ hideCloseButton: dataToSend.hideCloseButton || false })
-//   }
-//   if ('hideIcon' in dataToSend) {
-//     updateProps({ hideIcon: dataToSend.hideIcon || false })
-//   }
-//   if (dataToSend.iconColor) {
-//     updateProps({ iconColor: dataToSend.iconColor || 'dark' })
-//   }
-//   if (dataToSend.fullScreen === true || dataToSend.fullScreen === 'true') {
-//     updateProps({ fullScreen: dataToSend.fullScreen })
-//   }
-//   if (dataToSend.fullScreen === false || dataToSend.fullScreen === 'false') {
-//     updateProps({ fullScreen: dataToSend.fullScreen })
-//   }
-//   if (dataToSend && iframeComponent?.contentWindow) {
-//     tempDataToSend = dataToSend
-//     iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
-//   }
-//   if (dataToSend.askAi && iframeComponent?.contentWindow) {
-//     iframeComponent.contentWindow?.postMessage({ type: 'askAi', data: dataToSend || {} }, '*')
-//   }
-//   if ('config' in dataToSend) {
-//     const newconfig = { ...config, ...dataToSend?.config }
-//     applyConfig(newconfig)
-//     updateProps({ config: newconfig })
-//   }
-//   if ('parentId' in dataToSend) {
-//     const previousParentId = props['parentId']
-//     if (previousParentId !== dataToSend.parentId) {
-//       if (previousParentId) {
-//         const existingParent = document.getElementById(previousParentId)
-//         if (existingParent && parentContainer && existingParent.contains(parentContainer)) {
-//           existingParent.removeChild(parentContainer)
-//         }
-//       } else if (parentContainer && document.body.contains(parentContainer)) {
-//         document.body.removeChild(parentContainer)
-//       }
-//       updateProps({ parentId: dataToSend.parentId })
-//       // loadContent(dataToSend.parentId, false);
-//       changeContainer(dataToSend?.parentId || '')
-//       tempDataToSend = dataToSend
-//     }
-//   }
-// }
-
 SendDataToChatbot = function (dataToSend) {
-  console.log('dataToSend', dataToSend);
   if (typeof dataToSend === 'string') {
     dataToSend = JSON.parse(dataToSend)
   }
   if (window.ReactNativeWebView) window?.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'data', data: dataToSend }));
-
   if ('parentId' in dataToSend) {
+    tempDataToSend = { ...tempDataToSend, ...dataToSend }
     var previousParentId = props['parentId']
     var existingParent = document.getElementById(previousParentId)
     if (existingParent?.contains(parentContainer)) {
@@ -454,11 +407,9 @@ SendDataToChatbot = function (dataToSend) {
           document.body.removeChild(parentContainer)
         }
         updateProps({ parentId: dataToSend.parentId })
-        tempDataToSend = dataToSend
         changeContainer(dataToSend?.parentId || '')
       }
     } else {
-      tempDataToSend = dataToSend
       updateProps({ parentId: dataToSend.parentId })
       changeContainer(dataToSend?.parentId || '')
     }
@@ -483,7 +434,7 @@ const sendOtherData = (dataToSend) => {
     updateProps({ fullScreen: dataToSend.fullScreen })
   }
   if (dataToSend && iframeComponent?.contentWindow) {
-    tempDataToSend = dataToSend
+    tempDataToSend = { ...tempDataToSend, ...dataToSend }
     iframeComponent.contentWindow?.postMessage({ type: messageType, data: dataToSend }, '*')
   }
   if (dataToSend.askAi && iframeComponent?.contentWindow) {
