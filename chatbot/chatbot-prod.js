@@ -191,6 +191,7 @@ closeChatbot = function () {
         document.getElementById('interfaceEmbed').style.display = (props.hideIcon === true || props.hideIcon === 'true') ? 'none' : 'unset';
       }
       window.parent?.postMessage({ type: 'close', data: {} }, '*')
+      if (window.ReactNativeWebView) window?.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'close', data: {} }));
       iframeComponent.contentWindow?.postMessage({ type: 'close', data: {} }, '*')
     }, 200) // This should match the duration of the transition
 
@@ -433,6 +434,12 @@ if (iframeComponent?.contentWindow) {
 // }
 
 SendDataToChatbot = function (dataToSend) {
+  console.log('dataToSend', dataToSend);
+  if (typeof dataToSend === 'string') {
+    dataToSend = JSON.parse(dataToSend)
+  }
+  if (window.ReactNativeWebView) window?.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'data', data: dataToSend }));
+
   if ('parentId' in dataToSend) {
     var previousParentId = props['parentId']
     var existingParent = document.getElementById(previousParentId)
@@ -491,6 +498,7 @@ const sendOtherData = (dataToSend) => {
 
 openChatbot = function () {
   window.parent?.postMessage({ type: 'open', data: {} }, '*')
+  if (window.ReactNativeWebView) window?.ReactNativeWebView?.postMessage(JSON.stringify({ type: 'open', data: {} }));
   iframeComponent.contentWindow?.postMessage({ type: 'open', data: {} }, '*')
 
   if (document.getElementById('interfaceEmbed') && document.getElementById('iframe-parent-container')) {

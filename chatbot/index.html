@@ -9,74 +9,27 @@
 
 <body>
     <button onclick="setone()">button1</button>
-    <button onclick="settwo()">button2</button>
-    <button onclick="setthree()">button3</button>
+
     <div style="display: flex;">
         <div id="chatbot-container"
             style="background-color: rgb(156, 170, 212); width: 70%; height: 100vh; position: relative;">
             <script id="chatbot-main-script"
-            embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI4MjY5IiwiY2hhdGJvdF9pZCI6IjY2OTBlZmE2MDFkMjc1YWEwODA4ZTZmMiIsInVzZXJfaWQiOjY2OTMsImlhdCI6MTcyOTQ5NjUyMX0._8kELoqS90PP0IbZG9Fbiqnr76pewHXIg-LETia8uCs"
+            embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiIxMjMyMSJ9.nfnmATIEMKvAXOQn5TqzDxXq8IzSr35OERSlBK0QGi8"
+            bridgeName="Assistant"
             src="./chatbot-local.js"></script>
         </div>
         <div id="chatbot-second-container"
             style="background-color: rgb(92, 58, 58); width: 30%; height: 16vh; position: relative;">
-
         </div>
     </div>
     <script>
         function setone() {
             window.SendDataToChatbot({
-                // "threadId": "baba",
-                // "bridgeName": "baba",
-                // "askAi": "hello",
-                // "askAi": "hello"
-                // "parentId": "chatbot-container",
-                // "fullScreen": "true",
-                // "hideCloseButton": "true",
-                config: {
-                    type: "all_available_space"
-                }
+                "threadId": Math.random().toString(36).substring(2),
+                "bridgeName": "baba"
             });
         }
-        function settwo() {
-            // window.SendDataToChatbot({
-            //     "threadId": "jain",
-            //     "parentId": "chatbot-second-container",
-            //     "fullScreen": "true",
-            //     // "hideCloseButton": "false",
-            // });
-            window.SendDataToChatbot({
-                // "threadId": "baba",
-                // "bridgeName": "baba",
-                // "askAi": "hello",
-                // "askAi": "hello"
-                // "parentId": "chatbot-container",
-                // "fullScreen": "true",
-                // "hideCloseButton": "true",
-                config: {
-                    type: "left_slider"
-                }
-            });
-            // window.askAi("hello2")
-        }
-        function setthree() {
-            window.SendDataToChatbot({
-                "parentId": "",
-                "fullScreen": false
-            });
-            // window.reloadChats();
-            // window.askAi("parakh bhai")
-        }
-        window.addEventListener('message', function (event) {
-            console.log(event.data);
-            // if (event.data.type === "chatbot") {
-            // }
-        });
     </script>
-
-    <!-- <script id="chatbot-main-script"
-        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiIxMjNzZDRkZiJ9.JoAtoBfP4WnawuqRXSvjTOIJjYQ7G_MHaPXEC_otT7k"
-        src="./chatbot-local.js"></script> -->
 </body>
 
 </html>
