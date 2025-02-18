@@ -1,7 +1,7 @@
 /* eslint-disable */
 const urlToViasocket = `https://chatbot.viasocket.com/i`
 const styleUrl = 'https://chatbot-embed.viasocket.com/style-prod.css';
-const loginurl = 'https://routes.msg91.com/api/proxy/1258584/32nghul25/chatbot/loginuser';
+const loginurl = 'https://db.gtwy.ai/chatbot/loginuser';
 
 let tempDataToSend = null;
 let bodyLoaded = false;

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://interface-embed.viasocket.com/style.css">
+    <!-- <link rel="stylesheet" href="https://interface-embed.viasocket.com/style.css"> -->
 </head>
 
 <body>
-    <div id='iframe-parent-container'>
+    <!-- <div id='iframe-parent-container'>
         <div className='header'>
             <h4 id='title'>Title</h4>
         </div>
@@ -30,6 +30,17 @@
                 const receivedData = event.data;
                 console.log(receivedData);
             }
+        });
+    </script>
+     -->
+    <button id="interfaceEmbed"> OPen </button>
+    <script src="RAG/rag-local.js"
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI1NjYyIiwidXNlcl9pZCI6ImhhcnNoIn0.K4PxSvZzTKAjcjgzIPZYZVrs6XjHOsokYvjou2MDMJg"
+        id="rag-main-script"></script>
+    <script>
+        const element = document.getElementById("interfaceEmbed");
+        element.addEventListener("click", () => {
+            window.openRag();
         });
     </script>
 
