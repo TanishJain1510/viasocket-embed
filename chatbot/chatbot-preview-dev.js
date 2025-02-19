@@ -1,5 +1,5 @@
 /* eslint-disable */
-const urlToViasocket = `https://dev-chatbot.viasocket.com/chatbotpreview`
+const urlToViasocket = `https://dev-chatbot.gtwy.ai/chatbotpreview`
 const styleUrl = 'https://chatbot-embed.viasocket.com/style-dev.css';
 
 let tempDataToSend = null;

@@ -1,5 +1,5 @@
 /* eslint-disable */
-const urlToViasocket = `https://chatbot.viasocket.com/i`
+const urlToViasocket = `https://chatbot.gtwy.ai/i`
 const styleUrl = 'https://chatbot-embed.viasocket.com/style-prod.css';
 const loginurl = 'https://db.gtwy.ai/chatbot/loginuser';
 

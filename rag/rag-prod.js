@@ -1,6 +1,6 @@
 /* eslint-disable */
 const loginurl = 'https://db.gtwy.ai/user/embed/login';
-const urlToRag = `https://chatbot.viasocket.com/rag`;
+const urlToRag = `https://chatbot.gtwy.ai/rag`;
 
 (function () {
     let ragScript = document.getElementById('rag-main-script');
