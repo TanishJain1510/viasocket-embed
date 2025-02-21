@@ -1,9 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  entry: './chatbot/chatbot-preview-prod.js',
+  entry: './rag/rag-local.js',
   output: {
-    filename: 'chatbot-preview-prod.js',
+    filename: 'rag-local.js',
     path: path.resolve(__dirname, 'chatbot-build'),
   },
   module: {

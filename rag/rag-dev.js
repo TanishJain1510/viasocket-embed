@@ -5,6 +5,10 @@ const urlToRag = `https://dev-chatbot.gtwy.ai/rag`;
 (function () {
     let ragScript = document.getElementById('rag-main-script');
     const embedToken = ragScript.getAttribute('embedToken');
+    const configuration = {
+        chunkingType: ragScript.getAttribute('chunkingType') || null,
+        hideConfig: ragScript.getAttribute('hideConfig') || null,
+    }
     // Ensure a global namespace object exists
     window.MyEmbed = window.MyEmbed || {};
 
@@ -35,8 +39,12 @@ const urlToRag = `https://dev-chatbot.gtwy.ai/rag`;
         fetch(loginurl, requestOptions)
             .then(async (response) => {
                 const data = await response.json();
+                const dataToPass = {
+                    ...data?.data,
+                    configuration: configuration
+                }
                 let modifiedUrl = urlToRag;
-                const encodedData = encodeURIComponent(`${JSON.stringify(data.data)}`);
+                const encodedData = encodeURIComponent(`${JSON.stringify(dataToPass)}`);
                 modifiedUrl = `${modifiedUrl}?ragDetails=${encodedData}`;
                 embedIframe.src = modifiedUrl;
                 return data;
