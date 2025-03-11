@@ -1,5 +1,5 @@
 /* eslint-disable */
-const urlToViasocket = `http://localhost:3001/i`
+const urlToViasocket = `http://localhost:3001/chatbot`
 const styleUrl = 'https://chatbot-embed.viasocket.com/style-local.css';
 const loginurl = 'http://localhost:7072/chatbot/loginuser';
 
@@ -93,12 +93,16 @@ function createProps() {
       'hideCloseButton',
       'hideIcon',
       'parentId',
-      'config'
+      'config',
+      'headerButtons',
+      'eventsToSubscribe',
+      'modalConfig',
+      'allowModalSwitch'
     ]
     attributes.forEach((attr) => {
       if (interfaceScript.hasAttribute(attr)) {
         let attributeValue = interfaceScript.getAttribute(attr)
-        if (attr === 'config' && attributeValue) {
+        if ((attr === 'config' || attr === 'headerButtons' || attr === 'eventsToSubscribe' || attr === 'modalConfig') && attributeValue) {
           try { attributeValue = JSON.parse(attributeValue) }
           catch (e) {
             console.log(e)
@@ -346,7 +350,6 @@ const loadContent = function (parentId = props.parentId || '', bodyLoadedHai = b
     parentContainer.className = 'popup-parent-container'
     parentContainer.style.display = 'none'
     parentContainer.innerHTML = `
-       ${closebutton}
         <iframe id="iframe-component-interfaceEmbed" title="iframe" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
       `
   }
@@ -480,3 +483,11 @@ askAi = function (data) {
 document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
   window.openChatbot()
 })
+
+// Parent window code
+window.addEventListener('message', (event) => {
+  // Security: Check the origin of the iframe (replace with your iframe's origin)
+  if (event.data?.type === 'CLOSE_CHATBOT') {
+    closeChatbot(); // Call your existing close function
+  }
+});

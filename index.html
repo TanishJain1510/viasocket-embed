@@ -33,12 +33,18 @@
         });
     </script>
      -->
-    <button id="interfaceEmbed"> OPen </button>
-    <script src="RAG/rag-local.js"
+
+
+
+
+    <!-- <button id="interfaceEmbed"> OPen </button>
+    <script src="https://chatbot-embed.viasocket.com/rag-local.js"
         embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI1NjYyIiwidXNlcl9pZCI6ImhhcnNoIn0.K4PxSvZzTKAjcjgzIPZYZVrs6XjHOsokYvjou2MDMJg"
-        id="rag-main-script"></script>
+        id="rag-main-script"></script> -->
     <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIxMjc3IiwidXNlcl9pZCI6InNBIn0.wT7qyJBbgN62nDIuir51BfYFU8CZK0Y1UgfTmYoFsTg" // prod token -->
-    <script>
+    <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI1NjYyIiwidXNlcl9pZCI6ImhhcnNoIn0.K4PxSvZzTKAjcjgzIPZYZVrs6XjHOsokYvjou2MDMJg" -->
+    <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIxMDA3NCIsInVzZXJfaWQiOiJoZWxvIn0.3hNE5xrayUqNu7ZP4mBJx_a0DIsIn7NsoZqbx7gjY0s" // dev token -->
+    <!-- <script>
         const element = document.getElementById("interfaceEmbed");
         element.addEventListener("click", () => {
             window.openRag();
@@ -48,8 +54,37 @@
                 console.log(e.data, 2323)
             }
         })
-    </script>
+    </script> -->
 
+    <!-- rich text -->
+    <!-- <button id="hello"> Integrations </button>
+    <script id="chatbot-main-script"
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiJwYWdpbmF0aW9uIn0.D9TP2k2ZFP3hHUfNnOMijP_nCon0MZ1GAb9_8Q8NuGs"
+        src="https://chatbot-embed.viasocket.com/chatbot-local.js" threadId="pagination2"
+        bridgeName="PaginatedAPI"></script>
+    <script>
+        const element = document.getElementById("hello");
+        element.addEventListener("click", () => {
+            window.SendDataToChatbot({
+                hideCloseButton: true,
+            })
+        });
+    </script> -->
+
+
+    <button id="hello"> Integrations </button>
+    <script id="chatbot-main-script"
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI3MDI3IiwiY2hhdGJvdF9pZCI6IjY2NmQyZjE4MTA5NTMzYmY0M2I4Yjc5YSIsInVzZXJfaWQiOiI1MzUyIiwiaWF0IjoxNzQxNDE5NTk2fQ.-n4SZKwP5NLxjedA9y-ryGrTppGKp-ku0gNVtfkdUsA"
+        src="./chatbot/chatbot-dev.js" threadId="pagination2" bridgeName="b22" hideCloseButton="false"></script>
+    <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiJwYWdpbmF0aW9uIn0.D9TP2k2ZFP3hHUfNnOMijP_nCon0MZ1GAb9_8Q8NuGs" local token -->
+    <script>
+        const element = document.getElementById("hello");
+        element.addEventListener("click", () => {
+            window.SendDataToChatbot({
+                hideCloseButton: true,
+            })
+        });
+    </script>
 </body>
 
 </html>
