@@ -5,6 +5,7 @@ const loginurl = 'http://localhost:7072/chatbot/loginuser';
 
 let tempDataToSend = null;
 let bodyLoaded = false;
+let fullscreen = false;
 const messageType = 'interfaceData'
 let props = {}
 function makeImageUrl(imageId) {
@@ -143,6 +144,7 @@ const iframeObserver = new ResizeObserver((entries) => {
   const iframeParentContainer = document.getElementById('iframe-parent-container')
   for (let entry of entries) {
     const { width, height } = entry.contentRect;
+    if (fullscreen) return;
     // Perform necessary actions based on new dimensions
     if (width < 600) {
       if (iframeParentContainer) {
@@ -467,10 +469,23 @@ document.getElementById('interfaceEmbed')?.addEventListener('click', () => {
   window.openChatbot()
 })
 
-// Parent window code
 window.addEventListener('message', (event) => {
   // Security: Check the origin of the iframe (replace with your iframe's origin)
   if (event.data?.type === 'CLOSE_CHATBOT') {
     closeChatbot(); // Call your existing close function
+  }
+  else if (event.data?.type === 'ENTER_FULL_SCREEN_CHATBOT') {
+    fullscreen = true;
+    const iframeContainer = document.getElementById('iframe-parent-container');
+    iframeContainer.style.transition = 'width 0.3s ease-in-out, height 0.3s ease-in-out';
+    iframeContainer.style.width = '100%';
+    iframeContainer.style.height = '100%';
+  }
+  else if (event.data?.type === 'EXIT_FULL_SCREEN_CHATBOT') {
+    fullscreen = false;
+    const iframeContainer = document.getElementById('iframe-parent-container');
+    iframeContainer.style.transition = 'width 0.3s ease-in-out, height 0.3s ease-in-out';
+    iframeContainer.style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh';
+    iframeContainer.style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw';
   }
 });

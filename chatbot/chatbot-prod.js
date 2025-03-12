@@ -5,6 +5,7 @@ const loginurl = 'https://db.gtwy.ai/chatbot/loginuser';
 
 let tempDataToSend = null;
 let bodyLoaded = false;
+let fullscreen = false;
 const messageType = 'interfaceData'
 let props = {}
 function makeImageUrl(imageId) {
@@ -142,6 +143,7 @@ const iframeObserver = new ResizeObserver((entries) => {
   for (let entry of entries) {
     const { width, height } = entry.contentRect;
     // Perform necessary actions based on new dimensions
+    if (fullscreen) return;
     if (width < 600) {
       if (iframeParentContainer) {
         iframeParentContainer.style.height = '100%'
@@ -470,5 +472,19 @@ window.addEventListener('message', (event) => {
   // Security: Check the origin of the iframe (replace with your iframe's origin)
   if (event.data?.type === 'CLOSE_CHATBOT') {
     closeChatbot(); // Call your existing close function
+  }
+  else if (event.data?.type === 'ENTER_FULL_SCREEN_CHATBOT') {
+    fullscreen = true;
+    const iframeContainer = document.getElementById('iframe-parent-container');
+    iframeContainer.style.transition = 'width 0.3s ease-in-out, height 0.3s ease-in-out';
+    iframeContainer.style.width = '100%';
+    iframeContainer.style.height = '100%';
+  }
+  else if (event.data?.type === 'EXIT_FULL_SCREEN_CHATBOT') {
+    fullscreen = false;
+    const iframeContainer = document.getElementById('iframe-parent-container');
+    iframeContainer.style.transition = 'width 0.3s ease-in-out, height 0.3s ease-in-out';
+    iframeContainer.style.height = `${config?.height}${config?.heightUnit || ''}` || '70vh';
+    iframeContainer.style.width = `${config?.width}${config?.widthUnit || ''}` || '40vw';
   }
 });
