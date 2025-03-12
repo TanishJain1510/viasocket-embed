@@ -8,6 +8,7 @@ const urlToRag = `http://localhost:3001/rag`;
     const configuration = {
         chunkingType: ragScript.getAttribute('chunkingType') || null,
         hideConfig: ragScript.getAttribute('hideConfig') || null,
+        listPage: ragScript.getAttribute('listPage') || null,
     }
     // Ensure a global namespace object exists
     window.MyEmbed = window.MyEmbed || {};
