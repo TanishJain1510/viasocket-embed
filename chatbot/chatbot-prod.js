@@ -243,8 +243,8 @@ class ChatbotEmbedManager {
         iframeContainer.style.width = '100%';
         iframeContainer.style.height = '100%';
       } else {
-        iframeContainer.style.height = `${this.config?.height}${this.config?.heightUnit || ''}` || '70vh';
-        iframeContainer.style.width = `${this.config?.width}${this.config?.widthUnit || ''}` || '40vw';
+        iframeContainer.style.height = `${this.props?.config?.height}${this.props?.config?.heightUnit || ''}` || '70vh';
+        iframeContainer.style.width = `${this.props?.config?.width}${this.props?.config?.widthUnit || ''}` || '40vw';
       }
     }
   }
