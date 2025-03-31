@@ -188,7 +188,7 @@ class ChatbotEmbedManager {
         iframeContainer.style.opacity = 1;
       });
 
-      document.body.style.overflow = 'hidden';
+      // document.body.style.overflow = 'hidden';
     }
 
     if (window.parent) {
@@ -219,7 +219,7 @@ class ChatbotEmbedManager {
         }
 
         iframeContainer.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        // document.body.style.overflow = 'auto';
 
         const interfaceEmbed = document.getElementById('interfaceEmbed');
         if (interfaceEmbed) {
