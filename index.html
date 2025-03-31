@@ -4,11 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Script</title>
     <!-- <link rel="stylesheet" href="https://interface-embed.viasocket.com/style.css"> -->
+    <script id="chatbot-main-script"
+        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiJwYWdpbmF0aW9uIn0.D9TP2k2ZFP3hHUfNnOMijP_nCon0MZ1GAb9_8Q8NuGs" fullScreen="true"
+        src="./chatbot/chatbot-local.js" threadId="pagination2pagination2pagination2pagination2" bridgeName="testing"
+        chatIcon="" hideIcon="false"></script>
 </head>
 
-<body>
+<body style="height: 100vh;">
     <!-- <div id='iframe-parent-container'>
         <div className='header'>
             <h4 id='title'>Title</h4>
@@ -37,14 +41,14 @@
 
 
 
-    <button id="interfaceEmbed"> OPen </button>
+    <!-- <button id="interfaceEmbed"> OPen </button>
     <script src="rag/rag-local.js"
         embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI1NjYyIiwidXNlcl9pZCI6ImhhcnNoIn0.K4PxSvZzTKAjcjgzIPZYZVrs6XjHOsokYvjou2MDMJg"
-        id="rag-main-script" listPage="true"></script>
+        id="rag-main-script" listPage="true"></script> -->
     <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIxMjc3IiwidXNlcl9pZCI6InNBIn0.wT7qyJBbgN62nDIuir51BfYFU8CZK0Y1UgfTmYoFsTg" // prod token -->
     <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI1NjYyIiwidXNlcl9pZCI6ImhhcnNoIn0.K4PxSvZzTKAjcjgzIPZYZVrs6XjHOsokYvjou2MDMJg" -->
     <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiIxMDA3NCIsInVzZXJfaWQiOiJoZWxvIn0.3hNE5xrayUqNu7ZP4mBJx_a0DIsIn7NsoZqbx7gjY0s" // dev token -->
-    <script>
+    <!-- <script>
         const element = document.getElementById("interfaceEmbed");
         element.addEventListener("click", () => {
             window.openRag();
@@ -54,7 +58,7 @@
                 console.log(e.data, 2323)
             }
         })
-    </script>
+    </script> -->
 
     <!-- rich text -->
     <!-- <button id="hello"> Integrations </button>
@@ -71,22 +75,40 @@
         });
     </script> -->
 
+    <button id="hello"> Integrations </button>
 
-    <!-- <button id="hello"> Integrations </button>
-    <script id="chatbot-main-script"
-        embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiJwYWdpbmF0aW9uIn0.D9TP2k2ZFP3hHUfNnOMijP_nCon0MZ1GAb9_8Q8NuGs"
-        src="./chatbot/chatbot-local.js" threadId="pagination2" bridgeName="PaginatedAPI"
-        allowModalSwitch="true" chatTitle="parakh" chatIcon=""></script> -->
+
+    <div style="display: flex; width: 100%; height: 100%;">
+        <div style="width: 20%; background-color: #f0f0f0; height: 100%;" id="first">
+            <p>This div takes up 20% of the width</p>
+        </div>
+        <div style="width: 80%; background-color: #e0e0e0; height: 100%;" id="second">
+            <p>This div takes up 80% of the width</p>
+        </div>
+    </div>
+    <!-- <script id="chatbot-main-script"
+    embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiJwYWdpbmF0aW9uIn0.D9TP2k2ZFP3hHUfNnOMijP_nCon0MZ1GAb9_8Q8NuGs"
+    src="./chatbot/chatbot-local.js" threadId="pagination2pagination2pagination2pagination2" bridgeName="testing"
+    chatTitle="AI Assistant" chatIcon="" hideIcon="false"></script> -->
     <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI2NzMwIiwiY2hhdGJvdF9pZCI6IjY2OTBjYjI0M2QxYWQwODgyOWJjZDY2ZCIsInVzZXJfaWQiOiJwYWdpbmF0aW9uIn0.D9TP2k2ZFP3hHUfNnOMijP_nCon0MZ1GAb9_8Q8NuGs" local token -->
     <!-- embedToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdfaWQiOiI3MDI3IiwiY2hhdGJvdF9pZCI6IjY2NmQyZjE4MTA5NTMzYmY0M2I4Yjc5YSIsInVzZXJfaWQiOiI1MzUyIiwiaWF0IjoxNzQxNDE5NTk2fQ.-n4SZKwP5NLxjedA9y-ryGrTppGKp-ku0gNVtfkdUsA" dev token -->
-    <!-- <script>
+    <!-- embedToken"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGF0Ym90X2lkIjoiNjY1MDYyOGFkNDhlMjBlNjFjZjcwMWEwIiwib3JnX2lkIjoiMTI3NyIsInVzZXJfaWQiOiI4MzQyIiwiaWF0IjoxNzQyOTk1ODg3fQ.0JfWWbCyX_a1vmRjDYApKlE8mF28jb2NZkSF6mEblBQ" // prod token -->
+    <script>
+        let hideCloseButton = true;
         const element = document.getElementById("hello");
         element.addEventListener("click", () => {
+            hideCloseButton = !hideCloseButton;
             window.SendDataToChatbot({
-                hideCloseButton: true,
+                // hideCloseButton: true,
+                // chatTitle: 'AI Assistant hai',
+                parentId: 'second',
+                fullScreen: "true",
+                // allowModalSwitch: true,
             })
+            // window.askAi("hello")
+            // window.closeChatbot();
         });
-    </script> -->
+    </script>
 </body>
 
 </html>
