@@ -242,7 +242,9 @@ class ChatbotEmbedManager {
       if (enable) {
         iframeContainer.style.width = '100%';
         iframeContainer.style.height = '100%';
+        iframeContainer.classList.add('full-screen-without-border');
       } else {
+        iframeContainer.classList.remove('full-screen-without-border');
         iframeContainer.style.height = `${this.props?.config?.height}${this.props?.config?.heightUnit || ''}` || '70vh';
         iframeContainer.style.width = `${this.props?.config?.width}${this.props?.config?.widthUnit || ''}` || '40vw';
       }
